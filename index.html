@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NATURAL medikdh</title>
+
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {--green:#123d2b;--gold:#0e9427;--light:#f5f5f5}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:var(--light)}
+
+header{background:var(--green);color:white;padding:15px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:50px;height:50px;border-radius:50%}
+
+.search{padding:8px;border-radius:20px;border:none;width:200px}
+.btn{background:var(--gold);border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+
+.container{padding:20px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+
+.card{background:white;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:0.3s;cursor:pointer}
+.card:hover{transform:translateY(-8px)}
+
+.price{color:var(--gold);font-weight:bold}
+
+.cart{position:fixed;right:0;top:0;width:320px;height:100%;background:white;padding:20px;transform:translateX(100%);transition:.3s;overflow:auto}
+.cart.active{transform:translateX(0)}
+
+.cart-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.remove-btn{background:red;color:white;border:none;padding:4px 8px;border-radius:5px;cursor:pointer}
+.qty-btn{padding:3px 8px;border:none;background:#ccc;margin:0 3px;cursor:pointer}
+
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center}
+.modal-content{background:white;padding:20px;border-radius:20px;width:350px;max-width:90%}
+.modal-content p{margin:8px 0;line-height:1.4}
+#modalDesc{margin-top:10px;padding-top:10px;border-top:1px solid #eee}
+.modal-content .btn{margin-top:15px}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png">
+    <h2><span style="color:white">NATURAL</span> <span style="color:#c9a227">medikdh</span></h2>
+  </div>
+
+  <input class="search" id="search" placeholder="Buscar...">
+
+  <button class="btn" onclick="toggleCart()">🛒 (<span id="count">0</span>)</button>
+</header>
+
+<div class="container">
+
+<div class="grid" id="products"></div>
+
+</div>
+
+<div class="cart" id="cart">
+  <div style="display:flex;justify-content:space-between">
+    <h3>Carrito</h3>
+    <button onclick="toggleCart()">➡️</button>
+  </div>
+  <ul id="cartItems"></ul>
+  <p>Total: <span id="total">$0</span></p>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span onclick="closeModal()" style="float:right;cursor:pointer">✖</span>
+    <img id="modalImg" style="width:100%;border-radius:10px;margin-bottom:10px;">
+    <h2 id="modalName"></h2>
+    <p id="modalCategory"></p>
+    <p id="modalPrice"></p>
+    <p id="modalDesc"></p>
+
+    <div>
+      <button class="qty-btn" onclick="changeQty(-1)">-</button>
+      <span id="qty">1</span>
+      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+
+    <button class="btn" onclick="addFromModal()">Agregar al carrito</button>
+  </div>
+</div>
+
+<script>
+function formatPrice(v){return "$"+v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+
+let products=[];
+for(let i=1;i<=200;i++){
+  products.push({
+    id:i,
+    name:`Producto ${i}`,
+    price:10000+(i*500),
+    category:"General",
+    img:`img/prod${i}.jpg`,
+    desc:`Producto natural ${i}`
+  })
+}
+
+let cart=[];
+let selectedProduct=null;
+let quantity=1;
+
+function render(){
+  let html="";
+  products.slice(0,20).forEach(p=>{
+    html+=`<div class="card" onclick="openModal(${p.id})">
+      <img src="${p.img}" style="width:100%;border-radius:10px">
+      <h4>${p.name}</h4>
+      <div class="price">${formatPrice(p.price)}</div>
+    </div>`
+  })
+  document.getElementById("products").innerHTML=html
+}
+
+function openModal(id){
+  const p=products.find(x=>x.id===id)
+  selectedProduct=p
+  quantity=1
+
+  document.getElementById("modalImg").src=p.img
+  document.getElementById("modalName").textContent=p.name
+  document.getElementById("modalCategory").textContent=p.category
+  document.getElementById("modalPrice").textContent=formatPrice(p.price)
+  document.getElementById("modalDesc").textContent=p.desc
+  document.getElementById("qty").textContent=quantity
+
+  document.getElementById("modal").style.display="flex"
+}
+
+function changeQty(v){
+  quantity+=v
+  if(quantity<1) quantity=1
+  document.getElementById("qty").textContent=quantity
+}
+
+function addFromModal(){
+  for(let i=0;i<quantity;i++) cart.push(selectedProduct)
+  update()
+}
+
+function update(){
+  let total=0
+  let grouped={}
+
+  cart.forEach(i=>{
+    if(!grouped[i.name]) grouped[i.name]={...i,qty:1}
+    else grouped[i.name].qty++
+  })
+
+  let html=""
+  Object.values(grouped).forEach(i=>{
+    total+=i.price*i.qty
+    html+=`<li class="cart-item">
+      ${i.name} x ${i.qty}
+      <div>
+        <button class="qty-btn" onclick="removeOne('${i.name}')">-</button>
+        <button class="qty-btn" onclick="addOne('${i.name}')">+</button>
+      </div>
+    </li>`
+  })
+
+  document.getElementById("cartItems").innerHTML=html
+  document.getElementById("total").textContent=formatPrice(total)
+  document.getElementById("count").textContent=cart.length
+}
+
+function removeOne(name){
+  let i=cart.findIndex(p=>p.name===name)
+  if(i>-1) cart.splice(i,1)
+  update()
+}
+
+function addOne(name){
+  let p=products.find(x=>x.name===name)
+  cart.push(p)
+  update()
+}
+
+function toggleCart(){document.getElementById("cart").classList.toggle("active")}
+function closeModal(){document.getElementById("modal").style.display="none"}
+
+render()
+</script>
+
+</body>
+</html>
