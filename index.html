@@ -190,7 +190,7 @@
     </a>
 
     <script>
-        // CONFIGURACIÓN DE TU WHATSAPP YA LISTA
+        // Para WA
         const MI_NUMERO_WHATSAPP = "573150674848"; 
 
         function formatCOP(amount) {
@@ -202,10 +202,10 @@
             productsDatabase.push({ id, img: `jpeg/${imgName}`, name, category, price, description });
         }
 
-        // --- TUS PRODUCTOS ---
-        for (let i = 1; i <= 40; i++) {
-            addRealProduct(i, `prod${i}.jpeg`, `Producto Natural ${i}`, i % 2 === 0 ? 'Vitaminas' : 'General', 10000 + (i * 1000), `Esta es la descripción del producto ${i}.`);
-        }
+        // --- Descripción de Productos ---
+        addRealProduct(1, 'prod1.jpeg', 'Gomitas Manzana Satibo', 'Vitaminas', 45500, 'Te presentamos unas deliciosas gomitas con vinagre de manzana que mejoran tu digestión diaria. Te recomendamos tomar dos al día después de tus comidas.');
+        addRealProduct(2, 'prod2.jpeg', 'Crema de Aloe Vera', 'Cuidado Personal', 60000, 'Crema hidratante 100% natural. Es ideal para pieles sensibles, ataca la resequedad o  es muy buena para calmar quemaduras leves causadas por el sol.');
+        addRealProduct(3, 'prod3.jpeg', 'Gotas de Valeriana', 'General', 18000, 'Este es un extracto puro de valeriana y manzanilla para combatir el estrés acumulado. Aplica 10 gotas bajo la lengua antes de dormir.');
 
         let currentPage = 1;
         const itemsPerPage = 12; 
