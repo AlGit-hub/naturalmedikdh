@@ -60,7 +60,6 @@
         .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #aaa; cursor: pointer; }
         .close-modal:hover { color: var(--text-color); }
         
-        /* Estilos del Modal de Checkout */
         .checkout-title { margin-bottom: 10px; color: var(--green-header); }
         .checkout-desc { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
         .input-form { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; }
@@ -104,7 +103,7 @@
         /* BOTÓN FLOTANTE WHATSAPP */
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 2px 2px 15px rgba(0,0,0,0.2); z-index: 1000; transition: transform 0.3s; }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
-        .whatsapp-float img { width: 35px; height: 35px; filter: brightness(0) invert(1); } /* Hace el icono blanco */
+        .whatsapp-float img { width: 35px; height: 35px; filter: brightness(0) invert(1); }
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; padding: 15px; }
@@ -186,13 +185,13 @@
         </div>
     </div>
 
-    <a href="https://wa.me/573000000000" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
+    <a href="https://wa.me/573150674848" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     </a>
 
     <script>
-        // CONFIGURACIÓN DE TU WHATSAPP (¡Cambia esto!)
-        const MI_NUMERO_WHATSAPP = "573000000000"; // Código de país (57 para Colombia) + tu número
+        // CONFIGURACIÓN DE TU WHATSAPP YA LISTA
+        const MI_NUMERO_WHATSAPP = "573150674848"; 
 
         function formatCOP(amount) {
             return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
@@ -234,7 +233,6 @@
                 productsGrid.appendChild(card);
             });
             renderPagination();
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
         }
 
         function renderPagination() {
@@ -268,9 +266,7 @@
             currentPage = 1; renderProducts();
         });
 
-        // ==========================================
-        // Modal de Producto y Carrito
-        // ==========================================
+        // Modal y Carrito
         let currentModalQty = 1;
         let selectedProductModal = null;
         let cartItems = [];
@@ -322,16 +318,14 @@
             document.getElementById('cartCount').textContent = count;
         }
 
-        // ==========================================
-        // Lógica de Checkout y WhatsApp
-        // ==========================================
+        // WhatsApp Checkout
         function abrirCheckout() {
             if (cartItems.length === 0) {
                 alert("Tu carrito está vacío. ¡Agrega algunos productos primero!");
                 return;
             }
-            toggleCart(); // Cierra el carrito
-            document.getElementById('checkoutModal').classList.add('active'); // Abre la ventana de datos
+            toggleCart(); 
+            document.getElementById('checkoutModal').classList.add('active'); 
         }
 
         function enviarPedidoWhatsApp() {
@@ -343,7 +337,6 @@
                 return;
             }
 
-            // Armar el mensaje de WhatsApp
             let mensaje = `Hola soy *${nombre}* de la ciudad de *${ciudad}*, interesad@ en el siguiente pedido:\n\n`;
             let total = 0;
 
@@ -354,14 +347,10 @@
 
             mensaje += `\n💰 *Total del pedido: ${formatCOP(total)}*`;
 
-            // Codificar el texto para que funcione en un enlace (espacios, saltos de línea, etc.)
             const textoCodificado = encodeURIComponent(mensaje);
-            
-            // Crear el enlace de WhatsApp y abrirlo en una nueva pestaña
             const urlWhatsApp = `https://wa.me/${MI_NUMERO_WHATSAPP}?text=${textoCodificado}`;
             window.open(urlWhatsApp, '_blank');
 
-            // Cerrar el modal y (opcionalmente) limpiar el carrito
             closeModal('checkoutModal');
             cartItems = []; 
             updateCart();
