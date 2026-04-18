@@ -22,408 +22,352 @@
         body { background: var(--light-bg); color: var(--text-color); overflow-x: hidden; }
 
         header { background-color: var(--green-header); color: var(--white); padding: 15px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .logo { display: flex; align-items: center; gap: 15px; }
-        /* El logo del header sigue siendo el completo */
-        .logo img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background-color: var(--white); padding: 2px; }
-        .logo h2 { font-size: 1.5rem; font-weight: 700; }
-        .logo h2 span.natural { color: var(--white); }
-        .logo h2 span.medikdh { color: var(--gold-text); }
+        .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-area img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: white; padding: 2px; }
+        .user-greeting { font-size: 0.85rem; color: var(--gold-text); font-weight: 600; }
 
         .search-container { flex: 1; max-width: 400px; margin: 0 20px; }
-        .search-bar { width: 100%; padding: 12px 20px; border-radius: 25px; border: none; outline: none; font-size: 0.9rem; }
+        .search-bar { width: 100%; padding: 10px 20px; border-radius: 25px; border: none; outline: none; font-size: 0.9rem; }
 
-        .cart-btn { background-color: var(--green-accent); color: var(--white); border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .cart-btn:hover { background-color: #0b7e21; transform: scale(1.05); }
+        .cart-btn { background-color: var(--green-accent); color: var(--white); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        
+        /* BARRAS LATERALES */
+        .sidebar { position: fixed; top: 0; width: 350px; height: 100%; background: var(--white); z-index: 1500; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+        .sidebar-right { right: -350px; }
+        .sidebar-right.active { right: 0; }
+        .sidebar-left { left: -350px; }
+        .sidebar-left.active { left: 0; }
 
-        .main-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
-        .page-title { margin-bottom: 30px; text-align: center; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .product-card { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s ease; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eee; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .product-image-container { width: 100%; height: 200px; margin-bottom: 15px; overflow: hidden; border-radius: 10px; }
-        .product-image-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .product-card:hover .product-image-container img { transform: scale(1.1); }
-        .product-info h3 { font-size: 1.1rem; margin-bottom: 5px; color: var(--text-color); font-weight: 600; }
-        .product-price { font-size: 1.2rem; color: var(--green-accent); font-weight: 700; margin-top: 5px; }
+        /* CATEGORÍAS */
+        .categories-container { background: white; padding: 12px 0; border-bottom: 1px solid #eee; position: sticky; top: 85px; z-index: 900; display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-left: 20px; padding-right: 20px; }
+        .category-pill { padding: 8px 16px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; white-space: nowrap; }
+        .category-pill.active { background: var(--green-accent); color: white; border-color: var(--green-accent); }
 
-        .pagination { display: flex; justify-content: center; align-items: center; margin-top: 50px; gap: 8px; flex-wrap: wrap; }
-        .page-btn { width: 40px; height: 40px; border: 1px solid #ddd; background: var(--white); cursor: pointer; border-radius: 50%; font-weight: 600; font-size: 1rem; color: var(--text-color); transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .page-btn:hover:not(:disabled) { background: #eee; }
-        .page-btn.active { background: #4285F4; color: var(--white); border-color: #4285F4; }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .main-container { padding: 30px 20px; max-width: 1200px; margin: 0 auto; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+        
+        .product-card { background: var(--white); border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; border: 1px solid #f0f0f0; display: flex; flex-direction: column; height: 100%; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .product-img-box { width: 100%; height: 200px; overflow: hidden; border-radius: 10px; margin-bottom: 12px; }
+        .product-img-box img { width: 100%; height: 100%; object-fit: contain; }
 
         /* MODALES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { background: var(--white); width: 90%; max-width: 600px; border-radius: 20px; padding: 30px; position: relative; transform: scale(0.9); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #aaa; cursor: pointer; }
-        .close-modal:hover { color: var(--text-color); }
-        
-        .checkout-title { margin-bottom: 10px; color: var(--green-header); }
-        .checkout-desc { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-        .input-form { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; }
-        .input-form:focus { border-color: var(--green-accent); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--white); width: 100%; max-width: 480px; border-radius: 20px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-image { width: 100%; max-height: 250px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; background: #fafafa; }
 
-        .modal-body { display: flex; flex-direction: column; gap: 20px; }
-        .modal-img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; }
-        .modal-details { text-align: left; }
-        .modal-details h2 { margin-bottom: 10px; font-weight: 700; }
-        .modal-category { color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; display: block;}
-        .modal-price { font-size: 1.5rem; color: var(--green-accent); font-weight: 700; margin-bottom: 15px; }
-        .modal-description { font-size: 0.95rem; color: #555; line-height: 1.6; margin-bottom: 20px; }
-        .modal-actions { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 20px; border-top: 1px solid #eee; }
-        .quantity-controls { display: flex; align-items: center; gap: 15px; border: 1px solid #eee; padding: 10px; border-radius: 30px; }
-        .qty-btn-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--green-accent); width: 40px; }
-        .qty-val { font-size: 1.2rem; font-weight: 700; min-width: 20px; text-align: center; }
-        .btn-accion { background-color: var(--green-accent); color: var(--white); border: none; padding: 15px 30px; border-radius: 30px; font-weight: 600; cursor: pointer; font-size: 1rem; flex: 1; margin-left: 20px; transition: 0.3s; text-align: center; }
-        .btn-accion:hover { background-color: #0b7e21; }
+        .input-form { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 0.9rem; outline: none; margin-bottom: 10px; }
 
-        /* CARRITO LATERAL */
-        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: var(--white); box-shadow: -5px 0 25px rgba(0,0,0,0.1); z-index: 1500; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 30px; }
-        .cart-sidebar.active { right: 0; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .cart-header h3 { font-size: 1.5rem; }
-        .close-cart { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #aaa; }
-        .cart-items-container { flex: 1; overflow-y: auto; padding-right: 10px; }
-        .cart-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f9f9f9; }
-        .cart-item-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
-        .cart-item-info { flex: 1; }
-        .cart-item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
-        .cart-item-price { color: var(--green-accent); font-weight: 600; font-size: 0.9rem; }
-        .cart-item-controls { display: flex; align-items: center; gap: 5px; }
-        .cart-qty-btn { background-color: #f1f1f1; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-weight: 700; color: #555; transition: 0.2s;}
-        .cart-qty-btn:hover { background-color: #e5e5e5; }
-        .cart-item-qty { font-weight: 700; margin: 0 5px; min-width: 15px; text-align: center;}
-        .cart-footer { margin-top: auto; border-top: 1px solid #eee; padding-top: 20px; }
-        .total-container { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.3rem; margin-bottom: 20px; }
-        .checkout-btn { width: 100%; background-color: var(--green-accent); color: var(--white); border: none; border-radius: 8px; padding: 15px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-        .checkout-btn:hover { background-color: #0b7e21; }
+        .btn-main { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; background: var(--green-accent); color: white; }
+        .btn-outline { width: 100%; padding: 10px; border: 1px solid #ff4d4d; color: #ff4d4d; border-radius: 10px; background: none; font-weight: 600; cursor: pointer; }
 
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 2px 2px 15px rgba(0,0,0,0.2); z-index: 1000; transition: transform 0.3s; }
-        .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
-        .whatsapp-float img { width: 35px; height: 35px; filter: brightness(0) invert(1); }
+        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 30px; font-size: 0.9rem; z-index: 3000; display: none; }
+
+        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .whatsapp-float img { width: 32px; filter: brightness(0) invert(1); }
 
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 15px; padding: 15px; }
-            .search-container { order: 3; margin: 0; width: 100%; }
-            .products-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-            .cart-sidebar { width: 100%; right: -100%; }
+            header { padding: 15px; }
+            .sidebar { width: 100%; }
+            .categories-container { top: 130px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            <img src="logo.png" alt="Logo Completo">
-            <h2><span class="natural">NATURAL</span> <span class="medikdh">medikdh</span></h2>
+        <div class="logo-area" onclick="toggleSidebar('userSidebar')">
+            <img src="logo.png" alt="Logo">
+            <div>
+                <h2 style="font-size: 1.1rem;"><span style="color:white;">NATURAL</span> <span style="color:var(--gold-text);">medikdh</span></h2>
+                <p id="headerGreeting" class="user-greeting">Hola, Invitado</p>
+            </div>
         </div>
         <div class="search-container">
-            <input type="text" class="search-bar" id="searchBar" placeholder="Buscar productos naturales...">
+            <input type="text" class="search-bar" id="searchBar" placeholder="¿Qué necesitas hoy?">
         </div>
-        <button class="cart-btn" onclick="toggleCart()">
-            🛒 Tu Carrito (<span id="cartCount">0</span>)
+        <button class="cart-btn" onclick="toggleSidebar('cartSidebar')">
+            🛒 Carrito (<span id="cartCount">0</span>)
         </button>
     </header>
 
+    <div class="categories-container">
+        <button class="category-pill active" onclick="filterCat('Todas')">Todas</button>
+        <button class="category-pill" onclick="filterCat('Vitaminas')">Vitaminas</button>
+        <button class="category-pill" onclick="filterCat('Digestión')">Digestión</button>
+        <button class="category-pill" onclick="filterCat('General')">General</button>
+        <button class="category-pill" onclick="filterCat('Cuidado Personal')">Cuidado Personal</button>
+        <button class="category-pill" onclick="filterCat('Energía')">Energía</button>
+    </div>
+
     <div class="main-container">
-        <h1 class="page-title">Explora Nuestros Productos</h1>
         <div class="products-grid" id="productsGrid"></div>
-        <div class="pagination" id="paginationContainer"></div>
+        <div id="paginationContainer" style="display:flex; justify-content:center; gap:10px; margin-top:30px;"></div>
     </div>
 
-    <div class="modal-overlay" id="productModal" onclick="closeModalExterno(event, 'productModal')">
+    <div class="sidebar sidebar-left" id="userSidebar">
+        <div class="sidebar-header">
+            <h3>Mi Perfil</h3>
+            <button onclick="toggleSidebar('userSidebar')" style="border:none; background:none; font-size:1.5rem;">✕</button>
+        </div>
+        <div id="userForm">
+            <input type="text" id="uNombre" class="input-form" placeholder="Tu nombre completo">
+            <input type="text" id="uCiudad" class="input-form" placeholder="Ciudad">
+            <input type="text" id="uBarrio" class="input-form" placeholder="Barrio">
+            <input type="text" id="uDireccion" class="input-form" placeholder="Dirección">
+            <button class="btn-main" onclick="saveUser()">Guardar Datos</button>
+        </div>
+        <div id="userDisplay" style="display:none; text-align:center;">
+            <p id="displayNombre" style="font-size:1.2rem; font-weight:600; margin-bottom:20px;"></p>
+            <button class="btn-outline" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <div class="sidebar sidebar-right" id="cartSidebar">
+        <div class="sidebar-header">
+            <h3>Mi Carrito</h3>
+            <button onclick="toggleSidebar('cartSidebar')" style="border:none; background:none; font-size:1.5rem;">✕</button>
+        </div>
+        <div id="cartList" style="flex:1; overflow-y:auto;"></div>
+        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+            <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:20px;">
+                <span>Total:</span> <span id="cartTotal">$0</span>
+            </div>
+            <button class="btn-outline" onclick="clearCart()" style="margin-bottom:10px;">Vaciar</button>
+            <button class="btn-main" onclick="goCheckout()">Pedir por WhatsApp</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="pModal" onclick="closeModalExt(event, 'pModal')">
         <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('productModal')">✖</button>
-            <div class="modal-body">
-                <img src="" alt="Producto" class="modal-img" id="modalImage">
-                <div class="modal-details">
-                    <span class="modal-category" id="modalCategory"></span>
-                    <h2 id="modalName"></h2>
-                    <p class="modal-price" id="modalPrice"></p>
-                    <p class="modal-description" id="modalDescription"></p>
-                </div>
-                <div class="modal-actions">
-                    <div class="quantity-controls">
-                        <button class="qty-btn-modal" onclick="modifyModalQty(-1)">-</button>
-                        <span class="qty-val" id="modalQty">1</span>
-                        <button class="qty-btn-modal" onclick="modifyModalQty(1)">+</button>
-                    </div>
-                    <button class="btn-accion" id="modalAddButton">Añadir al pedido</button>
-                </div>
-            </div>
+            <button onclick="closeM('pModal')" style="position:absolute; top:15px; right:15px; border:none; background:#eee; width:30px; height:30px; border-radius:50%; cursor:pointer;">✕</button>
+            <img src="" id="mImg" class="modal-image">
+            <h2 id="mName"></h2>
+            <p id="mPrice" style="color:var(--green-accent); font-size:1.6rem; font-weight:700; margin:10px 0;"></p>
+            <p id="mDesc" style="font-size:0.9rem; color:#555; line-height:1.5; margin-bottom:20px;"></p>
+            <button id="mAddBtn" class="btn-main">Añadir al pedido</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="checkoutModal" onclick="closeModalExterno(event, 'checkoutModal')">
-        <div class="modal-content" style="max-width: 400px; text-align: center;">
-            <button class="close-modal" onclick="closeModal('checkoutModal')">✖</button>
-            <h2 class="checkout-title">Casi listo...</h2>
-            <p class="checkout-desc">Déjanos tus datos para enviarle tu pedido a nuestro asesor por WhatsApp.</p>
-            <input type="text" id="clienteNombre" class="input-form" placeholder="Tu Nombre">
-            <input type="text" id="clienteCiudad" class="input-form" placeholder="Ej: Cali, Valle del Cauca">
-            <button class="btn-accion" style="width: 100%; margin-left: 0; margin-top: 10px;" onclick="enviarPedidoWhatsApp()">Enviar a WhatsApp 📲</button>
+    <div class="modal-overlay" id="checkModal" onclick="closeModalExt(event, 'checkModal')">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">Datos de Envío</h2>
+            <input type="text" id="cN" class="input-form" placeholder="Nombre">
+            <input type="text" id="cC" class="input-form" placeholder="Ciudad">
+            <input type="text" id="cB" class="input-form" placeholder="Barrio">
+            <input type="text" id="cD" class="input-form" placeholder="Dirección">
+            <select id="cP" class="input-form">
+                <option value="Nequi">Nequi</option>
+                <option value="Daviplata">Daviplata</option>
+                <option value="Efectivo">Efectivo</option>
+            </select>
+            <button class="btn-main" onclick="sendWA()">Confirmar Pedido 📲</button>
         </div>
     </div>
 
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>Carrito</h3>
-            <button class="close-cart" onclick="toggleCart()">➡️</button>
-        </div>
-        <div class="cart-items-container" id="cartItemsList"></div>
-        <div class="cart-footer">
-            <div class="total-container">
-                <span>Total:</span>
-                <span id="cartTotal">$0.000</span>
-            </div>
-            <button class="checkout-btn" onclick="abrirCheckout()">Finalizar Pedido</button>
-        </div>
-    </div>
+    <div id="toast"></div>
 
-    <a href="https://wa.me/573150674848" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    <a href="https://wa.me/573150674848" class="whatsapp-float" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
     </a>
 
     <script>
-        const MI_NUMERO_WHATSAPP = "573150674848"; 
+        const WA_NUMBER = "573150674848";
+        const fmt = n => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
 
-        function formatCOP(amount) {
-            return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
-        }
+        let products = [];
+        const add = (id, img, name, cat, price, desc) => products.push({id, img:`jpeg/${img}`, name, cat, price, desc});
 
-        let productsDatabase = [];
-        function addRealProduct(id, imgName, name, category, price, description) {
-            productsDatabase.push({ id, img: `jpeg/${imgName}`, name, category, price, description });
-        }
+        // --- LOS 62 PRODUCTOS ---
+        add(1, 'prod1.jpeg', 'Gomitas Manzana Satibo', 'Vitaminas', 45500, 'Digestión sana con vinagre de manzana.');
+        add(2, 'prod2.jpeg', 'Cúrcuma + Pimienta', 'Cuidado Personal', 60000, 'Antiinflamatorio natural.');
+        add(3, 'prod3.jpeg', 'Magnesio + Potasio', 'General', 43000, 'Función muscular.');
+        add(4, 'prod4.jpeg', 'Cardo Mariano', 'Digestión', 60000, 'Protege el hígado.');
+        add(5, 'prod5.jpeg', 'Ashwagandha', 'Estrés', 55000, 'Reduce estrés.');
+        add(6, 'prod6.jpeg', 'Citrato Magnesio', 'General', 40000, 'Salud muscular.');
+        add(7, 'prod7.jpeg', 'Verde Aloe Vera', 'Digestión', 48000, 'Salud intestinal.');
+        add(8, 'prod8.jpeg', 'VID C+ Calostro', 'Vitaminas', 52000, 'Inmunidad.');
+        add(9, 'prod9.jpeg', 'DURON', 'Energía', 45000, 'Resistencia física.');
+        add(10, 'prod10.jpeg', 'Malteada Satisure', 'General', 55000, 'Nutrición diaria.');
+        add(11, 'prod11.jpeg', 'EPA-DHA Omega 3', 'Cuidado Personal', 65000, 'Salud cardiovascular.');
+        add(12, 'prod12.jpeg', 'Propolfin Kids', 'Vitaminas', 40000, 'Protección niños.');
+        add(13, 'prod13.jpeg', 'Propolfin Adultos', 'Vitaminas', 45000, 'Defensas adultos.');
+        add(14, 'prod14.jpeg', 'Collagen Biotin', 'Cuidado Personal', 60000, 'Piel y uñas.');
+        add(15, 'prod15.jpeg', 'Complex Children', 'Vitaminas', 48000, 'Multivitamínico infantil.');
+        add(16, 'prod16.jpeg', 'Vitamina D3', 'Vitaminas', 40000, 'Huesos fuertes.');
+        add(17, 'prod17.jpeg', 'Complex Adultos', 'Vitaminas', 55000, 'Energía adultos.');
+        add(18, 'prod18.jpeg', 'Colágeno Hidrolizado', 'Cuidado Personal', 50000, 'Firmeza piel.');
+        add(19, 'prod19.jpeg', 'PlaXavil', 'Vitaminas', 45000, 'Refuerzo inmune.');
+        add(20, 'prod20.jpeg', 'Vinu-CR-Brl', 'Vitaminas', 50000, 'Vitamina C y Zinc.');
+        add(21, 'prod21.jpeg', 'Torvitol', 'General', 55000, 'Antioxidantes.');
+        add(22, 'prod22.jpeg', 'Almendras D3 Calcio', 'Cuidado Personal', 48000, 'Salud ósea.');
+        add(23, 'prod23.jpeg', 'Binergy Biopronat', 'General', 60000, 'Probióticos.');
+        add(24, 'prod24.jpeg', 'Bio XL-S', 'General', 55000, 'Metabolismo.');
+        add(25, 'prod25.jpeg', '18 Raics', 'General', 65000, 'Fórmula natural.');
+        add(26, 'prod26.jpeg', 'Plus Aguaje', 'General', 50000, 'Bienestar mujer.');
+        add(27, 'prod27.jpeg', 'AntRitico', 'General', 45000, 'Dolor articular.');
+        add(28, 'prod28.jpeg', 'Biloying', 'General', 55000, 'Vitalidad.');
+        add(29, 'prod29.jpeg', 'Bililax', 'General', 50000, 'Regularidad.');
+        add(30, 'prod30.jpeg', 'Calci D', 'General', 40000, 'Calcio.');
+        add(31, 'prod31.jpeg', 'ResVeratol', 'General', 60000, 'Antienvejecimiento.');
+        add(32, 'prod32.jpeg', 'Chanca Piedra', 'General', 45000, 'Salud renal.');
+        add(33, 'prod33.jpeg', 'Citrato Magnesio Pura', 'General', 40000, 'Magnesio.');
+        add(34, 'prod34.jpeg', 'Clormag', 'General', 45000, 'Cloruro magnesio.');
+        add(35, 'prod35.jpeg', 'Clorofila', 'General', 40000, 'Desintoxicante.');
+        add(36, 'prod36.jpeg', 'ColahenVit', 'Cuidado Personal', 50000, 'Colágeno.');
+        add(37, 'prod37.jpeg', 'Colágeno Marino', 'Cuidado Personal', 55000, 'Origen marino.');
+        add(38, 'prod38.jpeg', 'Fenogreco', 'General', 45000, 'Apoyo digestivo.');
+        add(39, 'prod39.jpeg', 'Fosbril', 'General', 50000, 'Fósforo.');
+        add(40, 'prod40.jpeg', 'Glucosartrim', 'General', 79000, 'Movilidad.');
+        add(41, 'prod41.jpeg', 'Maca Negra Roja', 'General', 45000, 'Energizante.');
+        add(42, 'prod42.jpeg', 'HEGLB-Max', 'General', 55000, 'Hemoglobina.');
+        add(43, 'prod43.jpeg', 'Komp - B', 'General', 50000, 'Complejo B.');
+        add(44, 'prod44.jpeg', 'NAT Resveratrol', 'General', 60000, 'Salud celular.');
+        add(45, 'prod45.jpeg', 'Oirculen', 'General', 45000, 'Circulación.');
+        add(46, 'prod46.jpeg', 'Proshom', 'General', 55000, 'Hombre.');
+        add(47, 'prod47.jpeg', 'Ptenciol', 'General', 50000, 'Vitalidad.');
+        add(48, 'prod48.jpeg', 'Ashwagandha D3', 'General', 60000, 'Huesos.');
+        add(49, 'prod49.jpeg', 'Arthro Patique', 'General', 45000, 'Articulaciones.');
+        add(50, 'prod50.jpeg', 'Cardomarin', 'General', 55000, 'Hígado.');
+        add(51, 'prod51.jpeg', 'Echinacea D3', 'General', 50000, 'Inmunidad.');
+        add(52, 'prod52.jpeg', 'Enzydophilus', 'General', 45000, 'Enzimas.');
+        add(53, 'prod53.jpeg', 'Ginkgo Biloba D3', 'General', 55000, 'Memoria.');
+        add(54, 'prod54.jpeg', 'Melatonina D3', 'General', 50000, 'Descanso.');
+        add(55, 'prod55.jpeg', 'Phyllanthus', 'General', 45000, 'Riñones.');
+        add(56, 'prod56.jpeg', 'Saw Palmetto D3', 'General', 55000, 'Próstata.');
+        add(57, 'prod57.jpeg', 'Alcachofa Compuesta', 'General', 50000, 'Depurativo.');
+        add(58, 'prod58.jpeg', 'Arándano', 'General', 45000, 'Antioxidante.');
+        add(59, 'prod59.jpeg', 'Biotina Magnesio', 'General', 55000, 'Cabello.');
+        add(60, 'prod60.jpeg', 'Macasource', 'General', 45000, 'Energía.');
+        add(61, 'prod61.jpeg', 'Melatonina', 'General', 50000, 'Sueño.');
+        add(62, 'prod62.jpeg', 'HEPANAT', 'General', 60000, 'Salud hígado.');
 
-        // --- Base de Datos de Productos ---
-        addRealProduct(1, 'prod1.jpeg', 'Gomitas Manzana Satibo', 'Vitaminas', 45500, 'Deliciosas gomitas con vinagre de manzana que mejoran tu digestión diaria.');
-        addRealProduct(2, 'prod2.jpeg', 'Cúrcuma + Pimienta Negra', 'Cuidado Personal', 60000, 'Antiinflamatorio y antioxidante natural ideal para dolores articulares.');
-        addRealProduct(3, 'prod3.jpeg', 'Magnesio + Potasio', 'General', 43000, 'Mejora la función muscular y reduce calambres.');
-        addRealProduct(4, 'prod4.jpeg', 'Cardo Mariano', 'Digestión', 60000, 'Ayuda a proteger y regenerar el hígado.');
-        addRealProduct(5, 'prod5.jpeg', 'Ashwagandha', 'Estrés', 55000, 'Adaptógeno que reduce el estrés y mejora el sueño.');
-        addRealProduct(6, 'prod6.jpeg', 'Citrato de Magnesio', 'General', 40000, 'Reduce fatiga y favorece la salud cardiovascular.');
-        addRealProduct(7, 'prod7.jpeg', 'Verde con Aloe Vera', 'Digestión', 48000, 'Mejora la digestión y el estreñimiento.');
-        addRealProduct(8, 'prod8.jpeg', 'VID C+ Calostro', 'Vitaminas', 52000, 'Fortalece el sistema inmunológico.');
-        addRealProduct(9, 'prod9.jpeg', 'DURON', 'Energía', 45000, 'Mejora la energía y resistencia física.');
-        addRealProduct(10, 'prod10.jpeg', 'Malteada Satisure', 'General', 55000, 'Suplemento equilibrado de vitaminas y minerales.');
-        addRealProduct(11, 'prod11.jpeg', 'EPA-DHA Omega 3', 'Cuidado Personal', 65000, 'Ácidos grasos esenciales para salud cardiovascular.');
-        addRealProduct(12, 'prod12.jpeg', 'Propolfin Kids', 'Vitaminas', 40000, 'Propóleo y vitamina C para niños.');
-        addRealProduct(13, 'prod13.jpeg', 'Propolfin Adultos', 'Vitaminas', 45000, 'Fortalece defensas en adultos.');
-        addRealProduct(14, 'prod14.jpeg', 'Collagen & Biotin Plus', 'Cuidado Personal', 60000, 'Salud de piel, cabello y uñas.');
-        addRealProduct(15, 'prod15.jpeg', 'Complex Plus Children', 'Vitaminas', 48000, 'Multivitamínico para el crecimiento infantil.');
-        addRealProduct(16, 'prod16.jpeg', 'D3', 'Vitaminas', 40000, 'Fortalece huesos y función inmune.');
-        addRealProduct(17, 'prod17.jpeg', 'Complex Plus Adultos', 'Vitaminas', 55000, 'Energía y defensas para adultos.');
-        addRealProduct(18, 'prod18.jpeg', 'Colágeno Hidrolizado', 'Cuidado Personal', 50000, 'Elasticidad y firmeza de la piel.');
-        addRealProduct(19, 'prod19.jpeg', 'PlaXavil', 'Vitaminas', 45000, 'Propóleo y zinc para el sistema inmune.');
-        addRealProduct(20, 'prod20.jpeg', 'Vinu-CR-Brl', 'Vitaminas', 50000, 'Suplemento de Vitamina C y Zinc.');
-        addRealProduct(21, 'prod21.jpeg', 'Torvitol', 'General', 55000, 'Combinación de vitaminas y antioxidantes.');
-        addRealProduct(22, 'prod22.jpeg', 'Almendras con D3 y Calcio', 'Cuidado Personal', 48000, 'Salud ósea y dental.');
-        addRealProduct(23, 'prod23.jpeg', 'Binergy Biopronat', 'General', 60000, 'Probióticos y prebióticos intestinales.');
-        addRealProduct(24, 'prod24.jpeg', 'Bio XL-S', 'General', 55000, 'Apoyo al metabolismo y pérdida de peso.');
-        addRealProduct(25, 'prod25.jpeg', '18 Raics', 'General', 65000, 'Fórmula natural para energía y salud general.');
-        addRealProduct(26, 'prod26.jpeg', 'Plus Aguaje', 'General', 50000, 'Salud general y fortalecimiento inmune.');
-        addRealProduct(27, 'prod27.jpeg', 'AntRitico', 'General', 45000, 'Alivio articular y reducción de inflamación.');
-        addRealProduct(28, 'prod28.jpeg', 'Biloying', 'General', 55000, 'Energía y bienestar integral.');
-        addRealProduct(29, 'prod29.jpeg', 'Bililax', 'General', 50000, 'Fórmula natural potente para el día a día.');
-        addRealProduct(30, 'prod30.jpeg', 'Calci D', 'General', 40000, 'Fortalecimiento de los huesos con Calcio y Vit D.');
-        addRealProduct(31, 'prod31.jpeg', 'ResVeratol', 'General', 60000, 'Antioxidante potente para la salud general.');
-        addRealProduct(32, 'prod32.jpeg', 'Chanca', 'General', 45000, 'Fórmula tradicional para bienestar natural.');
-        addRealProduct(33, 'prod33.jpeg', 'Citrato de Magnesio', 'General', 40000, 'Suplemento esencial para músculos y nervios.');
-        addRealProduct(34, 'prod34.jpeg', 'Clormag', 'General', 45000, 'Cloruro de magnesio de alta pureza.');
-        addRealProduct(35, 'prod35.jpeg', 'Clorofila', 'General', 40000, 'Desintoxicación y energía natural.');
-        addRealProduct(36, 'prod36.jpeg', 'Colágeno Hidrolizado ColahenVit', 'Cuidado Personal', 50000, 'Salud articular y estética de piel.');
-        addRealProduct(37, 'prod37.jpeg', 'Colágeno Marino', 'Cuidado Personal', 55000, 'Máxima absorción para cabello y uñas.');
-        addRealProduct(38, 'prod38.jpeg', 'Fenogreco', 'General', 45000, 'Apoyo natural metabólico e inmune.');
-        addRealProduct(39, 'prod39.jpeg', 'Fosbril', 'General', 50000, 'Fosfato de calcio para salud general.');
-        addRealProduct(40, 'prod40.jpeg', 'Glucosartrim', 'General', 79000, 'Glucosamina y condroitina para movilidad.');
-        addRealProduct(41, 'prod41.jpeg', 'Maca Negra - Maca Roja', 'General', 45000, 'Vigorizante y energizante natural.');
-        addRealProduct(42, 'prod42.jpeg', 'HEGLB-Max', 'General', 55000, 'Bienestar integral y sistema inmune.');
-        addRealProduct(43, 'prod43.jpeg', 'Komp - B', 'General', 50000, 'Complejo vitamínico B esencial.');
-        addRealProduct(44, 'prod44.jpeg', 'NAT + Reservatrol', 'General', 60000, 'Antienvejecimiento y salud celular.');
-        addRealProduct(45, 'prod45.jpeg', 'Oirculen', 'General', 45000, 'Apoyo a la circulación y energía.');
-        addRealProduct(46, 'prod46.jpeg', 'Proshom', 'General', 55000, 'Salud integral del hombre.');
-        addRealProduct(47, 'prod47.jpeg', 'Ptenciol', 'General', 50000, 'Vitalidad y desempeño físico.');
-        addRealProduct(48, 'prod48.jpeg', 'Ashwagandha D3', 'General', 60000, 'Control de estrés y huesos fuertes.');
-        addRealProduct(49, 'prod49.jpeg', 'Arthro Patique', 'General', 45000, 'Apoyo especializado en articulaciones.');
-        addRealProduct(50, 'prod50.jpeg', 'Cardomarin', 'General', 55000, 'Protector hepático natural.');
-        addRealProduct(51, 'prod51.jpeg', 'Echinacea D3', 'General', 50000, 'Defensas al máximo contra virus.');
-        addRealProduct(52, 'prod52.jpeg', 'Enzydophilus', 'General', 45000, 'Enzimas digestivas y probióticos.');
-        addRealProduct(53, 'prod53.jpeg', 'Ginkgo Biloba D3', 'General', 55000, 'Memoria, concentración y defensas.');
-        addRealProduct(54, 'prod54.jpeg', 'Melatonina D3', 'General', 50000, 'Descanso profundo y salud inmune.');
-        addRealProduct(55, 'prod55.jpeg', 'Phyllanthus CH5', 'General', 45000, 'Fórmula natural Chancapiedra.');
-        addRealProduct(56, 'prod56.jpeg', 'Saw Palmetto D3', 'General', 55000, 'Salud prostática y bienestar masculino.');
-        addRealProduct(57, 'prod57.jpeg', 'Alcachofa Compuesta', 'General', 50000, 'Depurativo natural y digestivo.');
-        addRealProduct(58, 'prod58.jpeg', 'Arándano', 'General', 45000, 'Salud urinaria y antioxidantes.');
-        addRealProduct(59, 'prod59.jpeg', 'Biotina + Magnesio', 'General', 55000, 'Fórmula completa para piel y cabello.');
-        addRealProduct(60, 'prod60.jpeg', 'Macasource', 'General', 45000, 'Energía de origen natural.');
-        addRealProduct(61, 'prod61.jpeg', 'Meltonina', 'General', 50000, 'Regulador natural del ciclo del sueño.');
-        addRealProduct(62, 'prod62.jpeg', 'HEPANAT SILIMARINA', 'General', 60000, 'Salud hepática avanzada.');
+        let cart = JSON.parse(localStorage.getItem('nm_cart')) || [];
+        let user = JSON.parse(localStorage.getItem('nm_user')) || null;
+        let curFilter = 'Todas', curPage = 1, perPage = 12;
 
-        let currentPage = 1;
-        const itemsPerPage = 12; 
-        let currentFilteredProducts = productsDatabase;
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 2500); }
 
-        const productsGrid = document.getElementById('productsGrid');
-        const paginationContainer = document.getElementById('paginationContainer');
-        const searchBar = document.getElementById('searchBar');
-
-        // --- LÓGICA DE CARRITO CON LOCALSTORAGE ---
-        // 1. Cargamos el carrito desde el almacenamiento local si existe
-        let cartItems = JSON.parse(localStorage.getItem('carrito_natural_medikdh')) || [];
-
-        function saveCart() {
-            // 2. Guardamos cada vez que hay cambios
-            localStorage.setItem('carrito_natural_medikdh', JSON.stringify(cartItems));
-            updateCart();
-        }
-
-        function renderProducts() {
-            productsGrid.innerHTML = ''; 
-            if (currentFilteredProducts.length === 0) {
-                productsGrid.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No encontramos productos con ese nombre.</p>';
-                paginationContainer.innerHTML = ''; return;
-            }
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const productsToShow = currentFilteredProducts.slice(startIndex, endIndex);
-
-            productsToShow.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.onclick = () => openModal(p.id);
-                card.innerHTML = `<div class="product-image-container"><img src="${p.img}" alt="${p.name}" onerror="this.src='logo.png';"></div><div class="product-info"><h3>${p.name}</h3><p class="product-price">${formatCOP(p.price)}</p></div>`;
-                productsGrid.appendChild(card);
+        function render() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            let filtered = curFilter === 'Todas' ? products : products.filter(p => p.cat === curFilter);
+            const search = document.getElementById('searchBar').value.toLowerCase();
+            filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
+            
+            const start = (curPage - 1) * perPage;
+            filtered.slice(start, start + perPage).forEach(p => {
+                const d = document.createElement('div');
+                d.className = 'product-card';
+                d.onclick = () => openP(p);
+                d.innerHTML = `<div class="product-img-box"><img src="${p.img}" onerror="this.src='logo.png'"></div><h3>${p.name}</h3><p style="color:var(--green-accent);font-weight:700;">${fmt(p.price)}</p>`;
+                grid.appendChild(d);
             });
-            renderPagination();
+            renderPager(filtered.length);
         }
 
-        function renderPagination() {
-            paginationContainer.innerHTML = '';
-            const totalPages = Math.ceil(currentFilteredProducts.length / itemsPerPage);
-            if (totalPages <= 1) return; 
-
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn'; prevBtn.innerHTML = '←'; prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => { currentPage--; renderProducts(); };
-            paginationContainer.appendChild(prevBtn);
-
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, currentPage + 2);
-            for(let i = startPage; i <= endPage; i++) {
-                const btn = document.createElement('button');
-                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                btn.innerText = i; btn.onclick = () => { currentPage = i; renderProducts(); };
-                paginationContainer.appendChild(btn);
+        function renderPager(total) {
+            const cont = document.getElementById('paginationContainer'); cont.innerHTML = '';
+            const pages = Math.ceil(total / perPage);
+            if(pages <= 1) return;
+            for(let i=1; i<=pages; i++) {
+                const b = document.createElement('button');
+                b.style = `padding:8px 15px; border-radius:50%; border:1px solid #ddd; background:${i===curPage?'#0e9427':'white'}; color:${i===curPage?'white':'black'}; cursor:pointer;`;
+                b.innerText = i; b.onclick = () => { curPage = i; render(); window.scrollTo(0,0); };
+                cont.appendChild(b);
             }
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn'; nextBtn.innerHTML = '→'; nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; renderProducts(); };
-            paginationContainer.appendChild(nextBtn);
         }
 
-        searchBar.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            currentFilteredProducts = productsDatabase.filter(p => p.name.toLowerCase().includes(searchTerm));
-            currentPage = 1; renderProducts();
-        });
-
-        let currentModalQty = 1;
-        let selectedProductModal = null;
-
-        function openModal(id) {
-            const p = productsDatabase.find(x => x.id === id);
-            selectedProductModal = p; currentModalQty = 1;
-            document.getElementById('modalImage').src = p.img;
-            document.getElementById('modalCategory').textContent = p.category;
-            document.getElementById('modalName').textContent = p.name;
-            document.getElementById('modalPrice').textContent = formatCOP(p.price);
-            document.getElementById('modalDescription').textContent = p.description;
-            document.getElementById('modalQty').textContent = currentModalQty;
-            document.getElementById('modalAddButton').onclick = () => { addToCart(p, currentModalQty); closeModal('productModal'); };
-            document.getElementById('productModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+        function filterCat(c) {
+            curFilter = c; curPage = 1;
+            document.querySelectorAll('.category-pill').forEach(b => b.classList.toggle('active', b.innerText === c));
+            render();
         }
 
-        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.style.overflow = ''; }
-        function closeModalExterno(e, modalId) { if (e.target === document.getElementById(modalId)) closeModal(modalId); }
-        function modifyModalQty(v) { currentModalQty += v; if(currentModalQty<1) currentModalQty=1; document.getElementById('modalQty').textContent = currentModalQty; }
+        document.getElementById('searchBar').addEventListener('input', () => { curPage = 1; render(); });
 
-        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('active'); }
-
-        function addToCart(product, qty) {
-            const item = cartItems.find(i => i.id === product.id);
-            if (item) item.qty += qty; else cartItems.push({ ...product, qty });
-            saveCart(); // Guardamos cambios
+        function saveUser() {
+            const d = { n: document.getElementById('uNombre').value, c: document.getElementById('uCiudad').value, b: document.getElementById('uBarrio').value, d: document.getElementById('uDireccion').value };
+            if(!d.n) return alert("Dinos tu nombre");
+            localStorage.setItem('nm_user', JSON.stringify(d));
+            user = d; initUser(); showToast("¡Datos guardados!"); toggleSidebar('userSidebar');
         }
-
-        function changeCartQty(id, v) {
-            const item = cartItems.find(i => i.id === id);
-            if (!item) return;
-            item.qty += v; if (item.qty < 1) cartItems = cartItems.filter(i => i.id !== id);
-            saveCart(); // Guardamos cambios
+        function initUser() {
+            if(user) {
+                document.getElementById('headerGreeting').innerText = `Hola, ${user.n.split(' ')[0]}`;
+                document.getElementById('userForm').style.display = 'none';
+                document.getElementById('userDisplay').style.display = 'block';
+                document.getElementById('displayNombre').innerText = user.n;
+            } else {
+                document.getElementById('headerGreeting').innerText = `Hola, Invitado`;
+                document.getElementById('userForm').style.display = 'block';
+                document.getElementById('userDisplay').style.display = 'none';
+            }
         }
+        function logout() { localStorage.removeItem('nm_user'); user = null; initUser(); toggleSidebar('userSidebar'); }
 
-        function updateCart() {
-            const list = document.getElementById('cartItemsList');
-            list.innerHTML = ''; let total = 0, count = 0;
-
-            cartItems.forEach(item => {
-                total += item.price * item.qty; count += item.qty;
-                const div = document.createElement('div'); div.className = 'cart-item';
-                div.innerHTML = `<img src="${item.img}" class="cart-item-img" onerror="this.src='logo.png';"><div class="cart-item-info"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">${formatCOP(item.price)}</div></div><div class="cart-item-controls"><button class="cart-qty-btn" onclick="changeCartQty(${item.id}, -1)">-</button><span class="cart-item-qty">${item.qty}</span><button class="cart-qty-btn" onclick="changeCartQty(${item.id}, 1)">+</button></div>`;
-                list.appendChild(div);
+        function sync() { localStorage.setItem('nm_cart', JSON.stringify(cart)); updateUI(); }
+        function updateUI() {
+            const list = document.getElementById('cartList'); list.innerHTML = '';
+            let total = 0, count = 0;
+            cart.forEach(i => {
+                total += (i.price * i.qty); count += i.qty;
+                const d = document.createElement('div'); d.style="display:flex;gap:10px;margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:10px;";
+                d.innerHTML = `<img src="${i.img}" style="width:40px;height:40px;"> <div style="flex:1;"><strong>${i.name}</strong><br>${fmt(i.price)}</div> <div><button onclick="chQty(${i.id},-1)">-</button> ${i.qty} <button onclick="chQty(${i.id},1)">+</button></div>`;
+                list.appendChild(d);
             });
-            document.getElementById('cartTotal').textContent = formatCOP(total);
-            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartTotal').innerText = fmt(total);
+            document.getElementById('cartCount').innerText = count;
+        }
+        function addToCart(p, q) {
+            const ex = cart.find(i => i.id === p.id);
+            if(ex) ex.qty += q; else cart.push({...p, qty: q});
+            sync(); showToast("¡Añadido!");
+        }
+        function chQty(id, v) {
+            const i = cart.find(x => x.id === id);
+            if(i) { i.qty += v; if(i.qty < 1) cart = cart.filter(x => x.id !== id); sync(); }
+        }
+        function clearCart() { if(confirm("¿Vaciar?")) { cart = []; sync(); } }
+
+        function openP(p) {
+            document.getElementById('mImg').src = p.img;
+            document.getElementById('mName').innerText = p.name;
+            document.getElementById('mPrice').innerText = fmt(p.price);
+            document.getElementById('mDesc').innerText = p.desc;
+            document.getElementById('mAddBtn').onclick = () => { addToCart(p, 1); closeM('pModal'); };
+            document.getElementById('pModal').classList.add('active');
+        }
+        function toggleSidebar(id) { document.getElementById(id).classList.toggle('active'); }
+        function closeM(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModalExt(e, id) { if(e.target.id === id) closeM(id); }
+
+        function goCheckout() {
+            if(cart.length === 0) return;
+            toggleSidebar('cartSidebar');
+            if(user) {
+                document.getElementById('cN').value = user.n; document.getElementById('cC').value = user.c;
+                document.getElementById('cB').value = user.b; document.getElementById('cD').value = user.d;
+            }
+            document.getElementById('checkModal').classList.add('active');
         }
 
-        function abrirCheckout() {
-            if (cartItems.length === 0) {
-                alert("Tu carrito está vacío. ¡Agrega algunos productos primero!");
-                return;
-            }
-            toggleCart(); 
-            document.getElementById('checkoutModal').classList.add('active'); 
-        }
-
-        function enviarPedidoWhatsApp() {
-            const nombre = document.getElementById('clienteNombre').value.trim();
-            const ciudad = document.getElementById('clienteCiudad').value.trim();
-
-            if (!nombre || !ciudad) {
-                alert("Por favor, llena tu nombre y ciudad para continuar.");
-                return;
-            }
-
-            let mensaje = `Hola soy *${nombre}* de la ciudad de *${ciudad}*, interesad@ en el siguiente pedido:\n\n`;
+        function sendWA() {
+            const n = document.getElementById('cN').value, c = document.getElementById('cC').value, 
+                  b = document.getElementById('cB').value, d = document.getElementById('cD').value, p = document.getElementById('cP').value;
+            if(!n || !c || !d) return alert("Completa los datos");
+            let m = "*PEDIDO NATURAL MEDIKDH*\n\n*Cliente:* " + n + "\n*Ciudad:* " + c + "\n*Barrio:* " + b + "\n*Direccion:* " + d + "\n*Pago:* " + p + "\n\n*PRODUCTOS:*\n";
             let total = 0;
-
-            cartItems.forEach(item => {
-                mensaje += `🔸 ${item.qty}x ${item.name} (${formatCOP(item.price * item.qty)})\n`;
-                total += item.price * item.qty;
-            });
-
-            mensaje += `\n💰 *Total del pedido: ${formatCOP(total)}*`;
-
-            const textoCodificado = encodeURIComponent(mensaje);
-            const urlWhatsApp = `https://wa.me/${MI_NUMERO_WHATSAPP}?text=${textoCodificado}`;
-            window.open(urlWhatsApp, '_blank');
-
-            closeModal('checkoutModal');
-            cartItems = []; 
-            saveCart(); // Limpiamos el localStorage tras el pedido
-            document.getElementById('clienteNombre').value = '';
-            document.getElementById('clienteCiudad').value = '';
+            cart.forEach(i => { m += "- " + i.qty + "x " + i.name + " (" + fmt(i.price*i.qty) + ")\n"; total += (i.price*i.qty); });
+            m += "\n*TOTAL: " + fmt(total) + "*";
+            window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(m)}`, '_blank');
+            cart = []; sync(); closeM('checkModal');
         }
 
-        // Al iniciar la página, ejecutamos esto una vez
-        renderProducts();
-        updateCart(); 
+        render(); initUser(); updateUI();
     </script>
 </body>
 </html>
