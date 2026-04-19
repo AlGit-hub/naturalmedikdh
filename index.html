@@ -306,18 +306,20 @@
         /* ══════════ PANEL PERFIL ══════════ */
         .panel {
             position: fixed;
-            top: 0; bottom: 0;
+            top: 0;
+            bottom: 0;
+            left: 0;
             width: 320px;
             background: var(--white);
             z-index: 1600;
-            transition: .35s cubic-bezier(.4,0,.2,1);
+            transition: transform .35s cubic-bezier(.4,0,.2,1);
+            transform: translateX(-100%);
             display: flex;
             flex-direction: column;
             padding: 28px 24px;
             box-shadow: 0 0 30px rgba(0,0,0,.18);
         }
-        .panel-left { left: -340px; }
-        .panel-left.on { left: 0; }
+        .panel-left.on { transform: translateX(0); }
         .panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
         .panel-header h3 { font-size:1.1rem; color: var(--green-dark); }
         .close-btn { border:none; background:none; font-size:1.4rem; cursor:pointer; line-height:1; color: var(--gray); }
@@ -484,7 +486,6 @@
 </head>
 <body>
 
-<!-- ══════════ HEADER ══════════ -->
 <header>
     <div class="logo-area" onclick="togglePanel('userPanel')">
         <img src="logo.png" alt="Logo Natural Medikdh" onerror="this.style.display='none'">
@@ -506,7 +507,6 @@
     </div>
 </header>
 
-<!-- ══════════ CATEGORÍAS ══════════ -->
 <div class="cats" id="catsBar">
     <button class="pill active" onclick="filterCat('Todas')">🌿 Todas</button>
     <button class="pill" onclick="filterCat('Vitaminas')">💊 Vitaminas</button>
@@ -517,13 +517,11 @@
     <button class="pill" onclick="filterCat('Energía')">⚡ Energía</button>
 </div>
 
-<!-- ══════════ GRID PRODUCTOS ══════════ -->
 <div class="main">
     <div class="grid" id="grid"></div>
     <div class="pager" id="pager"></div>
 </div>
 
-<!-- ══════════ MODAL PRODUCTO ══════════ -->
 <div class="overlay" id="prodOverlay" onclick="closeIfBg(event,'prodOverlay')">
     <div class="modal-box">
         <button class="close-btn" style="position:absolute;top:14px;right:14px;background:#eee;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;" onclick="closeOverlay('prodOverlay')">✕</button>
@@ -545,7 +543,6 @@
     </div>
 </div>
 
-<!-- ══════════ MODAL CHECKOUT ══════════ -->
 <div class="overlay" id="checkOverlay" onclick="closeIfBg(event,'checkOverlay')">
     <div class="checkout-box">
         <button class="close-btn" style="position:absolute;top:14px;right:14px;background:#eee;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;" onclick="closeOverlay('checkOverlay')">✕</button>
@@ -565,14 +562,12 @@
     </div>
 </div>
 
-<!-- ══════════ PANEL PERFIL ══════════ -->
 <div class="panel panel-left" id="userPanel">
     <div class="panel-header">
         <h3>👤 Mi Perfil</h3>
         <button class="close-btn" onclick="togglePanel('userPanel')">✕</button>
     </div>
 
-    <!-- Formulario -->
     <div id="profileForm">
         <p style="font-size:.82rem;color:var(--gray);margin-bottom:16px;">Guarda tus datos para hacer pedidos más rápido.</p>
         <div class="field"><label>Nombre completo</label><input type="text" id="uNombre" class="field input" placeholder="Tu nombre" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;"></div>
@@ -582,7 +577,6 @@
         <button class="btn-green" onclick="saveProfile()" style="margin-top:8px;">💾 Guardar mis datos</button>
     </div>
 
-    <!-- Perfil guardado -->
     <div id="profileSaved" style="display:none;">
         <div class="profile-saved">
             <div class="hi">¡Hola de nuevo! 👋</div>
@@ -593,7 +587,6 @@
     </div>
 </div>
 
-<!-- ══════════ CARRITO LATERAL ══════════ -->
 <div class="cart-panel" id="cartPanel">
     <div class="panel-header">
         <h3>🛒 Mi Pedido</h3>
@@ -610,11 +603,8 @@
     </div>
 </div>
 
-<!-- ══════════ TOAST ══════════ -->
 <div id="toast"></div>
 
-<!-- ══════════ WHATSAPP FLOAT ══════════ -->
-<!-- ══════════ FOOTER ══════════ -->
 <footer style="background:var(--green-dark); color:var(--white); padding:40px 20px 30px; margin-top:40px; text-align:center;">
     <div style="max-width:600px; margin:0 auto;">
         <div style="margin-bottom:6px; font-size:.8rem; color:rgba(255,255,255,.5); letter-spacing:1px; text-transform:uppercase;">Síguenos en</div>
@@ -622,7 +612,6 @@
 
         <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:30px;">
 
-            <!-- Facebook -->
             <a href="https://www.facebook.com/share/1Cg9MmFHPE/" target="_blank" rel="noopener"
                style="display:flex; align-items:center; gap:10px; background:#1877f2; color:white; text-decoration:none;
                       padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
@@ -635,7 +624,6 @@
                 Facebook
             </a>
 
-            <!-- TikTok -->
             <a href="https://www.tiktok.com/@naturalmedikdh.dh?_r=1&_t=ZS-95ehgYXbK4b" target="_blank" rel="noopener"
                style="display:flex; align-items:center; gap:10px; background:#010101; color:white; text-decoration:none;
                       padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
@@ -648,7 +636,6 @@
                 TikTok
             </a>
 
-            <!-- Instagram (próximamente) -->
             <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); color:rgba(255,255,255,.45);
                         padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
                         border:1.5px dashed rgba(255,255,255,.2); cursor:default;" title="Próximamente">
@@ -665,17 +652,13 @@
     </div>
 </footer>
 
-<!-- ══════════ WHATSAPP FLOAT (logo oficial) ══════════ -->
 <a href="https://wa.me/573150674848" class="wa-float" target="_blank" rel="noopener" title="Escríbenos por WhatsApp">
     <svg viewBox="0 0 39.9 40" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="white">
         <path d="M33.9 5.9C30.2 2.1 25.2 0 19.9 0 9 0 .1 8.9.1 19.8c0 3.5.9 6.9 2.7 9.9L0 40l10.6-2.8c2.9 1.6 6.1 2.4 9.4 2.4 10.9 0 19.9-8.9 19.9-19.8-.1-5.3-2.1-10.2-6-13.9zM19.9 36.4c-2.9 0-5.8-.8-8.3-2.3l-.6-.4-6.3 1.6 1.7-6.1-.4-.6c-1.6-2.6-2.5-5.6-2.5-8.7 0-9 7.3-16.3 16.3-16.3 4.4 0 8.4 1.7 11.5 4.8 3.1 3.1 4.7 7.1 4.7 11.5.1 9-7.2 16.5-16.1 16.5zm8.9-12.2c-.5-.2-2.9-1.4-3.3-1.6-.4-.2-.7-.2-1 .2-.3.5-1.2 1.6-1.5 1.9-.3.3-.5.4-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.3-2.4-2.8-2.6-3.3-.3-.5 0-.7.2-1l.9-1c.3-.4.4-.6.5-.9.2-.3.1-.6 0-.9-.1-.2-1-2.4-1.4-3.3-.4-.9-.7-.8-1-.8h-.9c-.3 0-.8.1-1.3.6-.4.5-1.7 1.6-1.7 4s1.7 4.6 2 4.9c.2.3 3.4 5.2 8.3 7.3 1.2.5 2.1.8 2.8 1 1.2.4 2.2.3 3.1.2.9-.1 2.9-1.2 3.3-2.3.4-1.1.4-2.1.3-2.3-.3-.2-.6-.3-1.1-.5z"/>
     </svg>
 </a>
 
-<!-- ══════════ DOCTORA ZEN ══════════ -->
 <div id="zenWrap" style="position:fixed; bottom:90px; right:22px; z-index:1200; display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
-
-    <!-- Burbuja de saludo -->
     <div id="zenBubble" style="
         background:var(--white);
         border-radius:16px 16px 4px 16px;
@@ -693,14 +676,12 @@
         line-height:1.4;
     ">¡Hola! 👋 Soy la <strong>Dra. Zen</strong><br>¿En qué te ayudo hoy?</div>
 
-    <!-- Avatar Doctora Zen -->
     <div id="zenBtn" onclick="toggleZenChat()" title="Hablar con Dra. Zen" style="
         position:relative;
         cursor:pointer;
         width:64px;
         transition:transform .3s;
     ">
-        <!-- Círculo base verde -->
         <div style="
             width:64px; height:64px;
             border-radius:50%;
@@ -713,10 +694,8 @@
             <img src="doctora-zen.png"
                  onerror="this.style.display='none'; document.getElementById('zenInitial').style.display='flex';"
                  style="width:100%; height:100%; object-fit:cover; object-position:center top; transform:scale(1.15); transform-origin:bottom center;">
-            <!-- Fallback si no hay imagen -->
             <div id="zenInitial" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:1.6rem;">🌿</div>
         </div>
-        <!-- Cabeza sobresaliendo: emoji/avatar arriba del círculo -->
         <div style="
             position:absolute;
             top:-14px; left:50%;
@@ -726,7 +705,6 @@
             filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
             pointer-events:none;
         ">👩‍⚕️</div>
-        <!-- Punto verde "en línea" -->
         <div style="
             position:absolute; bottom:2px; right:2px;
             width:14px; height:14px;
@@ -737,7 +715,6 @@
     </div>
 </div>
 
-<!-- ══════════ CHAT DOCTORA ZEN ══════════ -->
 <div id="zenChat" style="
     position:fixed;
     bottom:170px; right:22px;
@@ -752,7 +729,6 @@
     max-height:480px;
     animation:zenIn .3s ease;
 ">
-    <!-- Header chat -->
     <div style="background:linear-gradient(135deg,#123d2b,#0e9427); padding:14px 16px; display:flex; align-items:center; gap:10px;">
         <div style="font-size:1.8rem; line-height:1;">👩‍⚕️</div>
         <div style="flex:1;">
@@ -762,13 +738,11 @@
         <button onclick="toggleZenChat()" style="background:rgba(255,255,255,.15); border:none; color:white; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">✕</button>
     </div>
 
-    <!-- Área mensajes -->
     <div id="zenMessages" style="flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; max-height:300px; background:#f8fdf8;">
     </div>
 
-    <!-- Input zona -->
     <div id="zenInputZone" style="padding:10px 12px; border-top:1px solid var(--border); display:flex; gap:8px; align-items:center; background:white;">
-        <input id="zenInput" type="text" placeholder="Escribe tu pregunta..." 
+        <input id="zenInput" type="text" placeholder="Escribe tu pregunta..."
                style="flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:20px; font-family:'Poppins',sans-serif; font-size:.82rem; outline:none;"
                onkeydown="if(event.key==='Enter') sendZenMsg()">
         <button onclick="sendZenMsg()" style="background:var(--green-accent); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">➤</button>
@@ -850,13 +824,11 @@
 </style>
 
 <script>
-/* ══════ DOCTORA ZEN LOGIC ══════ */
 let zenOpen = false;
 let zenChatStarted = false;
 
-// FAQ base
 const ZEN_FAQ = [
-    { q: "¿Cómo hago un pedido?", a: "Es muy fácil 🛒 Elige tus productos, agrégalos al carrito, haz clic en *Finalizar pedido* y llena tus datos. Te contactamos por WhatsApp para confirmar." },
+    { q: "¿Cómo hago un pedido?", a: "Es muy fácil 🛒 Elige tus productos, agrégalos al carrito, haz clic en Finalizar pedido y llena tus datos. Te contactamos por WhatsApp para confirmar." },
     { q: "¿Hacen domicilio?", a: "¡Sí! Hacemos envíos a toda Colombia 🇨🇴 El tiempo de entrega depende de tu ciudad. Escríbenos por WhatsApp para más detalles." },
     { q: "¿Cuáles son los métodos de pago?", a: "Aceptamos Nequi 💚, Daviplata 💜 y Efectivo contra entrega 💵. Puedes elegir el que prefieras al finalizar tu pedido." },
     { q: "¿Los productos son naturales?", a: "¡Totalmente! 🌿 Todos nuestros productos son suplementos naturales, cuidadosamente seleccionados para tu bienestar. Son seguros y de alta calidad." },
@@ -881,7 +853,6 @@ function toggleZenChat() {
         }
     } else {
         chat.style.display = 'none';
-        // Mostrar burbuja de bienvenida brevemente
         bubble.style.opacity = '1';
         bubble.style.transform = 'translateY(0) scale(1)';
         setTimeout(() => {
@@ -891,7 +862,6 @@ function toggleZenChat() {
     }
 }
 
-// Mostrar burbuja al inicio después de 3s
 setTimeout(() => {
     const b = document.getElementById('zenBubble');
     b.style.opacity = '1';
@@ -935,7 +905,7 @@ function zenShowFAQ() {
 function selectFAQ(i) {
     zenUserMsg(ZEN_FAQ[i].q);
     setTimeout(() => {
-        zenBotMsg(ZEN_FAQ[i].a.replace(/\*/g, '<strong>').replace(/\*/g, '</strong>'));
+        zenBotMsg(ZEN_FAQ[i].a);
         setTimeout(() => zenOfferWA(), 600);
     }, 400);
 }
@@ -949,7 +919,6 @@ function zenOfferWA() {
         <div class="bubble">
             ¿Tienes más preguntas? Puedo responderlas aquí o puedes hablar directamente con nuestro equipo 💬
             <button class="zen-wa-btn" onclick="window.open('https://wa.me/573150674848?text=Hola%20NATURAL%20medikdh%2C%20necesito%20asesoría','_blank')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.523 5.855L0 24l6.29-1.493A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.366l-.36-.213-3.733.886.932-3.62-.234-.373A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182c5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
                 Continuar por WhatsApp
             </button>
         </div>`;
@@ -964,7 +933,6 @@ async function sendZenMsg() {
     input.value = '';
     zenUserMsg(text);
 
-    // Indicador "escribiendo..."
     const msgs = document.getElementById('zenMessages');
     const typing = document.createElement('div');
     typing.className = 'zen-msg-bot';
@@ -980,7 +948,7 @@ async function sendZenMsg() {
             body: JSON.stringify({
                 model: "claude-sonnet-4-20250514",
                 max_tokens: 1000,
-                system: `Eres la Doctora Zen, asesora de bienestar natural de la tienda NATURAL medikdh. 
+                system: `Eres la Doctora Zen, asesora de bienestar natural de la tienda NATURAL medikdh.
 Eres cálida, profesional, empática y experta en suplementos naturales y bienestar.
 Respondes SIEMPRE en español, de forma breve (máximo 3 oraciones) y amigable.
 Solo brindas información sobre salud natural, suplementos, bienestar y los productos de NATURAL medikdh.
@@ -1004,14 +972,11 @@ Empieza las respuestas de forma variada, no siempre igual.`,
 }
 </script>
 
-<!-- ══════════ JAVASCRIPT ══════════ -->
 <script>
-    /* ─── CONSTANTES ─── */
     const WA = "573150674848";
     const PER_PAGE = 12;
     const cop = n => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0}).format(n);
 
-    /* ─── BASE DE DATOS 62 PRODUCTOS ─── */
     const DB = [];
     const p = (id,img,name,cat,price,desc) => DB.push({id, img:`jpeg/${img}`, name, cat, price, desc});
 
@@ -1078,13 +1043,11 @@ Empieza las respuestas de forma variada, no siempre igual.`,
     p(61, 'prod61.jpeg', 'Melatonina',                    'General',           50000, 'Hormona del sueño en formato de fácil absorción. Regula el ritmo circadiano y mejora la calidad del descanso.');
     p(62, 'prod62.jpeg', 'HEPANAT Silimarina',            'General',           60000, 'Silimarina premium para la regeneración hepática, protección contra toxinas y mejora de la función del hígado.');
 
-    /* ─── ESTADO ─── */
     let filtered = [...DB];
     let page = 1;
     let cart = JSON.parse(localStorage.getItem('nm_cart') || '[]');
     let user = JSON.parse(localStorage.getItem('nm_user') || 'null');
 
-    /* ─── RENDER GRID ─── */
     function render() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
@@ -1119,7 +1082,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         }
     }
 
-    /* ─── FILTROS ─── */
     function filterCat(cat) {
         document.querySelectorAll('.pill').forEach(b => {
             b.classList.toggle('active', b.textContent.trim().includes(cat) || (cat === 'Todas' && b.textContent.includes('Todas')));
@@ -1136,7 +1098,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         render();
     });
 
-    /* ─── MODAL PRODUCTO ─── */
     function openProd(id) {
         const prod = DB.find(p => p.id === id);
         document.getElementById('mImg').src = prod.img;
@@ -1151,7 +1112,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
             closeOverlay('prodOverlay');
         };
 
-        // Relacionados
         const rel = DB.filter(r => r.cat === prod.cat && r.id !== prod.id).slice(0, 5);
         const row = document.getElementById('relRow');
         row.innerHTML = '';
@@ -1174,14 +1134,12 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         document.getElementById('mQty').textContent = q;
     }
 
-    /* ─── OVERLAYS ─── */
     function closeOverlay(id) {
         document.getElementById(id).classList.remove('on');
         document.body.style.overflow = '';
     }
     function closeIfBg(e, id) { if (e.target.id === id) closeOverlay(id); }
 
-    /* ─── CARRITO ─── */
     function toggleCart() { document.getElementById('cartPanel').classList.toggle('on'); }
 
     function addToCart(prod, qty) {
@@ -1246,17 +1204,15 @@ Empieza las respuestas de forma variada, no siempre igual.`,
     function popCart() {
         const btn = document.getElementById('cartBtn');
         btn.classList.remove('pop');
-        void btn.offsetWidth; // reflow
+        void btn.offsetWidth;
         btn.classList.add('pop');
         setTimeout(() => btn.classList.remove('pop'), 400);
     }
 
-    /* ─── CHECKOUT ─── */
     function openCheckout() {
         if (cart.length === 0) { toast('⚠️ Tu pedido está vacío'); return; }
         document.getElementById('cartPanel').classList.remove('on');
 
-        // Pre-llenar con datos del perfil si existen
         if (user) {
             document.getElementById('cNombre').value = user.nombre || '';
             document.getElementById('cCiudad').value  = user.ciudad  || '';
@@ -1297,7 +1253,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         toast('🎉 ¡Pedido enviado!');
     }
 
-    /* ─── PERFIL ─── */
     function togglePanel(id) { document.getElementById(id).classList.toggle('on'); }
 
     function saveProfile() {
@@ -1338,7 +1293,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         }
     }
 
-    /* ─── TOAST ─── */
     let toastTimer;
     function toast(msg) {
         const t = document.getElementById('toast');
@@ -1348,7 +1302,6 @@ Empieza las respuestas de forma variada, no siempre igual.`,
         toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    /* ─── INIT ─── */
     render();
     renderCart();
     renderProfile();
