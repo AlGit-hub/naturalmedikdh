@@ -21,7 +21,8 @@
         }
 
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+        html, body { overflow-x:hidden; width:100%; max-width:100%; }
+        body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); }
 
         /* ══════════ HEADER ══════════ */
         header {
@@ -464,9 +465,9 @@
 
         /* ══════════ RESPONSIVE ══════════ */
         @media (max-width: 600px) {
-            header { padding: 10px 14px; top: 0; }
-            .logo-text .brand { font-size: .95rem; }
-            .cats { top: 76px; }
+            header { padding: 10px 14px; top: 0; width: 100%; box-sizing: border-box; }
+            .search-wrap { width: 100%; order: 3; min-width: unset; max-width: 100%; }
+            .cats { top: 76px; width: 100%; }
             .cart-panel { width: 100%; right: -105%; }
             .panel { width: 100%; }
             .modal-box, .checkout-box { padding: 18px; }
