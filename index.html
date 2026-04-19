@@ -4,370 +4,1350 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NATURAL medikdh - Tu Tienda de Bienestar</title>
-
     <link rel="icon" type="image/png" href="minilogo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
-            --green-header: #123d2b; 
-            --green-accent: #0e9427;  
-            --gold-text: #c9a227;    
-            --light-bg: #f9f9f9;     
-            --text-color: #333;
-            --white: #ffffff;
+            --green-dark:   #123d2b;
+            --green-accent: #0e9427;
+            --gold:         #c9a227;
+            --bg:           #f5f7f5;
+            --white:        #ffffff;
+            --text:         #2b2b2b;
+            --gray:         #888;
+            --border:       #e8e8e8;
+            --danger:       #e63946;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--light-bg); color: var(--text-color); overflow-x: hidden; }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-        header { background-color: var(--green-header); color: var(--white); padding: 15px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .logo-area img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: white; padding: 2px; }
-        .user-greeting { font-size: 0.85rem; color: var(--gold-text); font-weight: 600; }
-
-        .search-container { flex: 1; max-width: 400px; margin: 0 20px; }
-        .search-bar { width: 100%; padding: 10px 20px; border-radius: 25px; border: none; outline: none; font-size: 0.9rem; }
-
-        .cart-btn { background-color: var(--green-accent); color: var(--white); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        
-        /* BARRAS LATERALES */
-        .sidebar { position: fixed; top: 0; width: 350px; height: 100%; background: var(--white); z-index: 1500; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
-        .sidebar-right { right: -350px; }
-        .sidebar-right.active { right: 0; }
-        .sidebar-left { left: -350px; }
-        .sidebar-left.active { left: 0; }
-
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        /* CATEGORÍAS */
-        .categories-container { background: white; padding: 12px 0; border-bottom: 1px solid #eee; position: sticky; top: 85px; z-index: 900; display: flex; justify-content: center; gap: 10px; overflow-x: auto; padding-left: 20px; padding-right: 20px; }
-        .category-pill { padding: 8px 16px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; white-space: nowrap; }
-        .category-pill.active { background: var(--green-accent); color: white; border-color: var(--green-accent); }
-
-        .main-container { padding: 30px 20px; max-width: 1200px; margin: 0 auto; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
-        
-        .product-card { background: var(--white); border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; border: 1px solid #f0f0f0; display: flex; flex-direction: column; height: 100%; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .product-img-box { width: 100%; height: 200px; overflow: hidden; border-radius: 10px; margin-bottom: 12px; }
-        .product-img-box img { width: 100%; height: 100%; object-fit: contain; }
-
-        /* MODALES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--white); width: 100%; max-width: 480px; border-radius: 20px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; }
-        .modal-image { width: 100%; max-height: 250px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; background: #fafafa; }
-
-        .input-form { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 0.9rem; outline: none; margin-bottom: 10px; }
-
-        .btn-main { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; background: var(--green-accent); color: white; }
-        .btn-outline { width: 100%; padding: 10px; border: 1px solid #ff4d4d; color: #ff4d4d; border-radius: 10px; background: none; font-weight: 600; cursor: pointer; }
-
-        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 30px; font-size: 0.9rem; z-index: 3000; display: none; }
-
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .whatsapp-float img { width: 32px; filter: brightness(0) invert(1); }
-
-        @media (max-width: 768px) {
-            header { padding: 15px; }
-            .sidebar { width: 100%; }
-            .categories-container { top: 130px; }
+        /* ══════════ HEADER ══════════ */
+        header {
+            background: var(--green-dark);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 12px rgba(0,0,0,.25);
+            flex-wrap: wrap;
         }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .logo-area img {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            background: var(--white);
+            padding: 2px;
+        }
+        .logo-text { line-height: 1.2; }
+        .logo-text .brand { font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: .5px; }
+        .logo-text .brand span { color: var(--gold); }
+        .logo-text .greeting { font-size: .72rem; color: var(--gold); font-weight: 600; }
+
+        .search-wrap { flex: 1; min-width: 160px; max-width: 420px; }
+        .search-wrap input {
+            width: 100%;
+            padding: 10px 18px;
+            border-radius: 24px;
+            border: none;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: .88rem;
+        }
+
+        .header-actions { display:flex; gap:10px; align-items:center; margin-left:auto; }
+
+        .btn-icon {
+            background: rgba(255,255,255,.12);
+            border: none;
+            color: var(--white);
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex; align-items:center; justify-content:center;
+            transition: background .2s;
+            position: relative;
+        }
+        .btn-icon:hover { background: rgba(255,255,255,.22); }
+        .btn-icon .badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: var(--gold);
+            color: var(--green-dark);
+            font-size: .62rem;
+            font-weight: 700;
+            min-width: 18px; height: 18px;
+            border-radius: 9px;
+            display: flex; align-items:center; justify-content:center;
+            padding: 0 4px;
+        }
+
+        @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+        .pop { animation: pop .35s ease; }
+
+        /* ══════════ CATEGORÍAS ══════════ */
+        .cats {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            position: sticky;
+            top: 80px;
+            z-index: 900;
+            scrollbar-width: none;
+        }
+        .cats::-webkit-scrollbar { display:none; }
+        .pill {
+            flex-shrink: 0;
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: .78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+            color: var(--text);
+        }
+        .pill.active, .pill:hover { background: var(--green-accent); color: var(--white); border-color: var(--green-accent); }
+
+        /* ══════════ GRID ══════════ */
+        .main { padding: 28px 20px; max-width: 1240px; margin: 0 auto; }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+            justify-content: center;
+        }
+
+        .grid .card {
+            flex: 1 1 220px;
+            max-width: 280px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform .25s, box-shadow .25s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(0,0,0,.1); }
+
+        .card-img {
+            width: 100%; height: 190px;
+            object-fit: contain;
+            background: #f8faf8;
+            padding: 8px;
+        }
+        .card-body { padding: 12px 14px 16px; flex: 1; display:flex; flex-direction:column; gap:4px; }
+        .card-cat { font-size: .68rem; color: var(--gray); text-transform: uppercase; letter-spacing: .5px; }
+        .card-name { font-size: .95rem; font-weight: 600; line-height: 1.3; }
+        .card-price { font-size: 1.05rem; color: var(--green-accent); font-weight: 700; margin-top: auto; padding-top: 6px; }
+
+        /* ══════════ PAGINACIÓN ══════════ */
+        .pager { display:flex; justify-content:center; gap:8px; margin-top:30px; flex-wrap:wrap; }
+        .pager-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: .85rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .pager-btn.active { background: var(--green-accent); color: var(--white); border-color: var(--green-accent); }
+        .pager-btn:hover:not(.active) { border-color: var(--green-accent); color: var(--green-accent); }
+
+        /* ══════════ OVERLAY ══════════ */
+        .overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 16px;
+        }
+        .overlay.on { display: flex; }
+
+        /* ══════════ MODAL PRODUCTO ══════════ */
+        .modal-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 92vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-box img.prod-img {
+            width: 100%; height: 230px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #f8faf8;
+            margin-bottom: 14px;
+        }
+        .modal-cat { font-size: .72rem; color: var(--gray); text-transform: uppercase; }
+        .modal-name { font-size: 1.25rem; font-weight: 700; margin: 4px 0; }
+        .modal-price { font-size: 1.4rem; color: var(--green-accent); font-weight: 700; }
+        .modal-desc { font-size: .85rem; color: #555; line-height: 1.55; margin: 10px 0 16px; }
+
+        .qty-row { display:flex; align-items:center; gap:14px; margin-top:6px; }
+        .qty-ctrl {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .qty-ctrl button {
+            border: none; background: none;
+            width: 36px; height: 36px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--green-accent);
+            cursor: pointer;
+        }
+        .qty-ctrl span { min-width: 28px; text-align:center; font-weight: 700; }
+
+        .btn-add {
+            flex: 1;
+            padding: 11px;
+            background: var(--green-accent);
+            color: var(--white);
+            border: none;
+            border-radius: 24px;
+            font-family: 'Poppins', sans-serif;
+            font-size: .92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .btn-add:hover { background: #0b7d1f; }
+
+        /* Relacionados */
+        .related-title { font-size: .85rem; font-weight: 700; margin: 18px 0 8px; border-top: 1px solid var(--border); padding-top: 14px; }
+        .related-row { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+        .related-row::-webkit-scrollbar { display:none; }
+        .rel-card { min-width: 88px; text-align:center; cursor:pointer; }
+        .rel-card img { width:72px; height:72px; border-radius:10px; object-fit:contain; background:#f8faf8; border:1px solid var(--border); }
+        .rel-card p { font-size: .65rem; font-weight:600; margin-top:4px; line-height:1.2; }
+
+        /* ══════════ MODAL CHECKOUT ══════════ */
+        .checkout-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 28px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+        .checkout-box h2 { color: var(--green-dark); margin-bottom: 18px; font-size: 1.2rem; }
+        .field { margin-bottom: 12px; }
+        .field label { display:block; font-size:.75rem; font-weight:700; color:#555; margin-bottom:4px; }
+        .field input, .field select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: .88rem;
+            outline: none;
+            background: var(--white);
+            transition: border-color .2s;
+        }
+        .field input:focus, .field select:focus { border-color: var(--green-accent); }
+
+        .btn-wa {
+            width: 100%;
+            padding: 14px;
+            background: #25d366;
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background .2s;
+        }
+        .btn-wa:hover { background: #1ebe5a; }
+
+        /* ══════════ PANEL PERFIL ══════════ */
+        .panel {
+            position: fixed;
+            top: 0; bottom: 0;
+            width: 320px;
+            background: var(--white);
+            z-index: 1600;
+            transition: .35s cubic-bezier(.4,0,.2,1);
+            display: flex;
+            flex-direction: column;
+            padding: 28px 24px;
+            box-shadow: 0 0 30px rgba(0,0,0,.18);
+        }
+        .panel-left { left: -340px; }
+        .panel-left.on { left: 0; }
+        .panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+        .panel-header h3 { font-size:1.1rem; color: var(--green-dark); }
+        .close-btn { border:none; background:none; font-size:1.4rem; cursor:pointer; line-height:1; color: var(--gray); }
+
+        .profile-saved {
+            background: #f0f9f1;
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .profile-saved .hi { color: var(--green-accent); font-weight: 700; margin-bottom: 4px; }
+        .profile-saved .pname { font-size: 1.15rem; font-weight: 700; }
+
+        .btn-danger {
+            width: 100%;
+            padding: 11px;
+            border: 1.5px solid var(--danger);
+            color: var(--danger);
+            border-radius: 10px;
+            background: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .btn-danger:hover { background: var(--danger); color: var(--white); }
+
+        .btn-green {
+            width: 100%;
+            padding: 13px;
+            background: var(--green-accent);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .btn-green:hover { background: #0b7d1f; }
+
+        /* ══════════ CARRITO LATERAL ══════════ */
+        .cart-panel {
+            position: fixed;
+            top: 0; bottom: 0; right: -420px;
+            width: 380px;
+            background: var(--white);
+            z-index: 1600;
+            transition: .35s cubic-bezier(.4,0,.2,1);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px;
+            box-shadow: -5px 0 20px rgba(0,0,0,.12);
+        }
+        .cart-panel.on { right: 0; }
+
+        .cart-list { flex: 1; overflow-y: auto; margin: 16px 0; }
+        .ci {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .ci img { width: 50px; height: 50px; border-radius: 8px; object-fit: contain; background: #f8faf8; flex-shrink:0; }
+        .ci-info { flex: 1; }
+        .ci-info strong { font-size: .88rem; display:block; line-height:1.3; }
+        .ci-info span { font-size: .8rem; color: var(--green-accent); font-weight:600; }
+        .ci-ctrl { display:flex; align-items:center; gap:6px; }
+        .ci-ctrl button {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: none;
+            cursor: pointer;
+            font-size: .9rem;
+            font-weight: 700;
+            display:flex; align-items:center; justify-content:center;
+            color: var(--green-accent);
+            transition: .2s;
+        }
+        .ci-ctrl button:hover { background: var(--green-accent); color: var(--white); border-color: var(--green-accent); }
+        .ci-ctrl span { font-weight: 700; min-width: 20px; text-align:center; }
+
+        .cart-footer { border-top: 1px solid var(--border); padding-top: 16px; }
+        .cart-total-row { display:flex; justify-content:space-between; font-weight:700; font-size:1.1rem; margin-bottom:14px; }
+
+        .btn-clear {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid var(--danger);
+            color: var(--danger);
+            background: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: .2s;
+        }
+        .btn-clear:hover { background: var(--danger); color: var(--white); }
+
+        /* ══════════ TOAST ══════════ */
+        #toast {
+            position: fixed;
+            bottom: 90px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1a1a1a;
+            color: var(--white);
+            padding: 11px 24px;
+            border-radius: 30px;
+            font-size: .88rem;
+            font-weight: 600;
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity .3s, transform .3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ══════════ WHATSAPP FLOAT ══════════ */
+        .wa-float {
+            position: fixed;
+            bottom: 22px; right: 22px;
+            background: #25d366;
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            display: flex; align-items:center; justify-content:center;
+            z-index: 1100;
+            box-shadow: 0 5px 18px rgba(0,0,0,.25);
+            transition: transform .2s;
+        }
+        .wa-float:hover { transform: scale(1.08); }
+        .wa-float img { width: 32px; filter: brightness(0) invert(1); }
+
+        /* ══════════ EMPTY STATE ══════════ */
+        .empty-cart {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--gray);
+        }
+        .empty-cart .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* ══════════ RESPONSIVE ══════════ */
+        @media (max-width: 600px) {
+            header { padding: 10px 14px; top: 0; }
+            .logo-text .brand { font-size: .95rem; }
+            .cats { top: 76px; }
+            .cart-panel { width: 100%; right: -105%; }
+            .panel { width: 100%; }
+            .modal-box, .checkout-box { padding: 18px; }
+        }
+
+        /* Scrollbar suave global */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-area" onclick="toggleSidebar('userSidebar')">
-            <img src="logo.png" alt="Logo">
-            <div>
-                <h2 style="font-size: 1.1rem;"><span style="color:white;">NATURAL</span> <span style="color:var(--gold-text);">medikdh</span></h2>
-                <p id="headerGreeting" class="user-greeting">Hola, Invitado</p>
-            </div>
+<!-- ══════════ HEADER ══════════ -->
+<header>
+    <div class="logo-area" onclick="togglePanel('userPanel')">
+        <img src="logo.png" alt="Logo Natural Medikdh" onerror="this.style.display='none'">
+        <div class="logo-text">
+            <div class="brand">NATURAL <span>medikdh</span></div>
+            <div class="greeting" id="greeting">👤 Mi Perfil</div>
         </div>
-        <div class="search-container">
-            <input type="text" class="search-bar" id="searchBar" placeholder="¿Qué necesitas hoy?">
-        </div>
-        <button class="cart-btn" onclick="toggleSidebar('cartSidebar')">
-            🛒 Carrito (<span id="cartCount">0</span>)
+    </div>
+
+    <div class="search-wrap">
+        <input type="text" id="searchBar" placeholder="¿Qué necesitas hoy?" autocomplete="off">
+    </div>
+
+    <div class="header-actions">
+        <button class="btn-icon" id="cartBtn" onclick="toggleCart()" title="Ver carrito">
+            🛒
+            <span class="badge" id="cartBadge">0</span>
         </button>
-    </header>
-
-    <div class="categories-container">
-        <button class="category-pill active" onclick="filterCat('Todas')">Todas</button>
-        <button class="category-pill" onclick="filterCat('Vitaminas')">Vitaminas</button>
-        <button class="category-pill" onclick="filterCat('Digestión')">Digestión</button>
-        <button class="category-pill" onclick="filterCat('General')">General</button>
-        <button class="category-pill" onclick="filterCat('Cuidado Personal')">Cuidado Personal</button>
-        <button class="category-pill" onclick="filterCat('Energía')">Energía</button>
     </div>
+</header>
 
-    <div class="main-container">
-        <div class="products-grid" id="productsGrid"></div>
-        <div id="paginationContainer" style="display:flex; justify-content:center; gap:10px; margin-top:30px;"></div>
-    </div>
+<!-- ══════════ CATEGORÍAS ══════════ -->
+<div class="cats" id="catsBar">
+    <button class="pill active" onclick="filterCat('Todas')">🌿 Todas</button>
+    <button class="pill" onclick="filterCat('Vitaminas')">💊 Vitaminas</button>
+    <button class="pill" onclick="filterCat('Digestión')">🌱 Digestión</button>
+    <button class="pill" onclick="filterCat('General')">✨ General</button>
+    <button class="pill" onclick="filterCat('Cuidado Personal')">🌸 Cuidado Personal</button>
+    <button class="pill" onclick="filterCat('Estrés')">🧘 Estrés</button>
+    <button class="pill" onclick="filterCat('Energía')">⚡ Energía</button>
+</div>
 
-    <div class="sidebar sidebar-left" id="userSidebar">
-        <div class="sidebar-header">
-            <h3>Mi Perfil</h3>
-            <button onclick="toggleSidebar('userSidebar')" style="border:none; background:none; font-size:1.5rem;">✕</button>
-        </div>
-        <div id="userForm">
-            <input type="text" id="uNombre" class="input-form" placeholder="Tu nombre completo">
-            <input type="text" id="uCiudad" class="input-form" placeholder="Ciudad">
-            <input type="text" id="uBarrio" class="input-form" placeholder="Barrio">
-            <input type="text" id="uDireccion" class="input-form" placeholder="Dirección">
-            <button class="btn-main" onclick="saveUser()">Guardar Datos</button>
-        </div>
-        <div id="userDisplay" style="display:none; text-align:center;">
-            <p id="displayNombre" style="font-size:1.2rem; font-weight:600; margin-bottom:20px;"></p>
-            <button class="btn-outline" onclick="logout()">Cerrar Sesión</button>
-        </div>
-    </div>
+<!-- ══════════ GRID PRODUCTOS ══════════ -->
+<div class="main">
+    <div class="grid" id="grid"></div>
+    <div class="pager" id="pager"></div>
+</div>
 
-    <div class="sidebar sidebar-right" id="cartSidebar">
-        <div class="sidebar-header">
-            <h3>Mi Carrito</h3>
-            <button onclick="toggleSidebar('cartSidebar')" style="border:none; background:none; font-size:1.5rem;">✕</button>
-        </div>
-        <div id="cartList" style="flex:1; overflow-y:auto;"></div>
-        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
-            <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:20px;">
-                <span>Total:</span> <span id="cartTotal">$0</span>
+<!-- ══════════ MODAL PRODUCTO ══════════ -->
+<div class="overlay" id="prodOverlay" onclick="closeIfBg(event,'prodOverlay')">
+    <div class="modal-box">
+        <button class="close-btn" style="position:absolute;top:14px;right:14px;background:#eee;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;" onclick="closeOverlay('prodOverlay')">✕</button>
+        <img src="" id="mImg" class="prod-img" onerror="this.src='logo.png'">
+        <div id="mCat" class="modal-cat"></div>
+        <div id="mName" class="modal-name"></div>
+        <div id="mPrice" class="modal-price"></div>
+        <p id="mDesc" class="modal-desc"></p>
+        <div class="qty-row">
+            <div class="qty-ctrl">
+                <button onclick="deltaQty(-1)">−</button>
+                <span id="mQty">1</span>
+                <button onclick="deltaQty(1)">+</button>
             </div>
-            <button class="btn-outline" onclick="clearCart()" style="margin-bottom:10px;">Vaciar</button>
-            <button class="btn-main" onclick="goCheckout()">Pedir por WhatsApp</button>
+            <button class="btn-add" id="mAddBtn">Añadir al pedido</button>
         </div>
+        <div class="related-title">También te puede interesar</div>
+        <div class="related-row" id="relRow"></div>
     </div>
+</div>
 
-    <div class="modal-overlay" id="pModal" onclick="closeModalExt(event, 'pModal')">
-        <div class="modal-content">
-            <button onclick="closeM('pModal')" style="position:absolute; top:15px; right:15px; border:none; background:#eee; width:30px; height:30px; border-radius:50%; cursor:pointer;">✕</button>
-            <img src="" id="mImg" class="modal-image">
-            <h2 id="mName"></h2>
-            <p id="mPrice" style="color:var(--green-accent); font-size:1.6rem; font-weight:700; margin:10px 0;"></p>
-            <p id="mDesc" style="font-size:0.9rem; color:#555; line-height:1.5; margin-bottom:20px;"></p>
-            <button id="mAddBtn" class="btn-main">Añadir al pedido</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="checkModal" onclick="closeModalExt(event, 'checkModal')">
-        <div class="modal-content">
-            <h2 style="margin-bottom:20px;">Datos de Envío</h2>
-            <input type="text" id="cN" class="input-form" placeholder="Nombre">
-            <input type="text" id="cC" class="input-form" placeholder="Ciudad">
-            <input type="text" id="cB" class="input-form" placeholder="Barrio">
-            <input type="text" id="cD" class="input-form" placeholder="Dirección">
-            <select id="cP" class="input-form">
-                <option value="Nequi">Nequi</option>
-                <option value="Daviplata">Daviplata</option>
-                <option value="Efectivo">Efectivo</option>
+<!-- ══════════ MODAL CHECKOUT ══════════ -->
+<div class="overlay" id="checkOverlay" onclick="closeIfBg(event,'checkOverlay')">
+    <div class="checkout-box">
+        <button class="close-btn" style="position:absolute;top:14px;right:14px;background:#eee;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;" onclick="closeOverlay('checkOverlay')">✕</button>
+        <h2>📦 Datos de Entrega</h2>
+        <div class="field"><label>Nombre completo</label><input type="text" id="cNombre" placeholder="Tu nombre"></div>
+        <div class="field"><label>Ciudad</label><input type="text" id="cCiudad" placeholder="Ciudad"></div>
+        <div class="field"><label>Barrio</label><input type="text" id="cBarrio" placeholder="Barrio o sector"></div>
+        <div class="field"><label>Dirección exacta</label><input type="text" id="cDir" placeholder="Calle, carrera, número..."></div>
+        <div class="field"><label>Método de pago</label>
+            <select id="cPago">
+                <option value="Nequi">💚 Nequi</option>
+                <option value="Daviplata">💜 Daviplata</option>
+                <option value="Efectivo">💵 Efectivo (contra entrega)</option>
             </select>
-            <button class="btn-main" onclick="sendWA()">Confirmar Pedido 📲</button>
         </div>
+        <button class="btn-wa" onclick="sendWA()">✅ Confirmar pedido por WhatsApp</button>
+    </div>
+</div>
+
+<!-- ══════════ PANEL PERFIL ══════════ -->
+<div class="panel panel-left" id="userPanel">
+    <div class="panel-header">
+        <h3>👤 Mi Perfil</h3>
+        <button class="close-btn" onclick="togglePanel('userPanel')">✕</button>
     </div>
 
-    <div id="toast"></div>
+    <!-- Formulario -->
+    <div id="profileForm">
+        <p style="font-size:.82rem;color:var(--gray);margin-bottom:16px;">Guarda tus datos para hacer pedidos más rápido.</p>
+        <div class="field"><label>Nombre completo</label><input type="text" id="uNombre" class="field input" placeholder="Tu nombre" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;"></div>
+        <div class="field"><label>Ciudad</label><input type="text" id="uCiudad" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;" placeholder="Ciudad"></div>
+        <div class="field"><label>Barrio</label><input type="text" id="uBarrio" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;" placeholder="Barrio o sector"></div>
+        <div class="field"><label>Dirección</label><input type="text" id="uDir" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;" placeholder="Dirección exacta"></div>
+        <button class="btn-green" onclick="saveProfile()" style="margin-top:8px;">💾 Guardar mis datos</button>
+    </div>
 
-    <a href="https://wa.me/573150674848" class="whatsapp-float" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-    </a>
+    <!-- Perfil guardado -->
+    <div id="profileSaved" style="display:none;">
+        <div class="profile-saved">
+            <div class="hi">¡Hola de nuevo! 👋</div>
+            <div class="pname" id="pName"></div>
+            <div style="font-size:.78rem;color:var(--gray);margin-top:6px;" id="pData"></div>
+        </div>
+        <button class="btn-danger" onclick="clearProfile()">🗑️ Borrar mis datos</button>
+    </div>
+</div>
 
-    <script>
-        const WA_NUMBER = "573150674848";
-        const fmt = n => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
+<!-- ══════════ CARRITO LATERAL ══════════ -->
+<div class="cart-panel" id="cartPanel">
+    <div class="panel-header">
+        <h3>🛒 Mi Pedido</h3>
+        <button class="close-btn" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-footer">
+        <div class="cart-total-row">
+            <span>Total</span>
+            <span id="cartTotal" style="color:var(--green-accent);">$0</span>
+        </div>
+        <button class="btn-clear" onclick="clearCart()">🗑️ Vaciar todo</button>
+        <button class="btn-green" onclick="openCheckout()">📲 Finalizar pedido</button>
+    </div>
+</div>
 
-        let products = [];
-        const add = (id, img, name, cat, price, desc) => products.push({id, img:`jpeg/${img}`, name, cat, price, desc});
+<!-- ══════════ TOAST ══════════ -->
+<div id="toast"></div>
 
-        // --- LOS 62 PRODUCTOS ---
-        add(1, 'prod1.jpeg', 'Gomitas Manzana Satibo', 'Vitaminas', 45500, 'Digestión sana con vinagre de manzana.');
-        add(2, 'prod2.jpeg', 'Cúrcuma + Pimienta', 'Cuidado Personal', 60000, 'Antiinflamatorio natural.');
-        add(3, 'prod3.jpeg', 'Magnesio + Potasio', 'General', 43000, 'Función muscular.');
-        add(4, 'prod4.jpeg', 'Cardo Mariano', 'Digestión', 60000, 'Protege el hígado.');
-        add(5, 'prod5.jpeg', 'Ashwagandha', 'Estrés', 55000, 'Reduce estrés.');
-        add(6, 'prod6.jpeg', 'Citrato Magnesio', 'General', 40000, 'Salud muscular.');
-        add(7, 'prod7.jpeg', 'Verde Aloe Vera', 'Digestión', 48000, 'Salud intestinal.');
-        add(8, 'prod8.jpeg', 'VID C+ Calostro', 'Vitaminas', 52000, 'Inmunidad.');
-        add(9, 'prod9.jpeg', 'DURON', 'Energía', 45000, 'Resistencia física.');
-        add(10, 'prod10.jpeg', 'Malteada Satisure', 'General', 55000, 'Nutrición diaria.');
-        add(11, 'prod11.jpeg', 'EPA-DHA Omega 3', 'Cuidado Personal', 65000, 'Salud cardiovascular.');
-        add(12, 'prod12.jpeg', 'Propolfin Kids', 'Vitaminas', 40000, 'Protección niños.');
-        add(13, 'prod13.jpeg', 'Propolfin Adultos', 'Vitaminas', 45000, 'Defensas adultos.');
-        add(14, 'prod14.jpeg', 'Collagen Biotin', 'Cuidado Personal', 60000, 'Piel y uñas.');
-        add(15, 'prod15.jpeg', 'Complex Children', 'Vitaminas', 48000, 'Multivitamínico infantil.');
-        add(16, 'prod16.jpeg', 'Vitamina D3', 'Vitaminas', 40000, 'Huesos fuertes.');
-        add(17, 'prod17.jpeg', 'Complex Adultos', 'Vitaminas', 55000, 'Energía adultos.');
-        add(18, 'prod18.jpeg', 'Colágeno Hidrolizado', 'Cuidado Personal', 50000, 'Firmeza piel.');
-        add(19, 'prod19.jpeg', 'PlaXavil', 'Vitaminas', 45000, 'Refuerzo inmune.');
-        add(20, 'prod20.jpeg', 'Vinu-CR-Brl', 'Vitaminas', 50000, 'Vitamina C y Zinc.');
-        add(21, 'prod21.jpeg', 'Torvitol', 'General', 55000, 'Antioxidantes.');
-        add(22, 'prod22.jpeg', 'Almendras D3 Calcio', 'Cuidado Personal', 48000, 'Salud ósea.');
-        add(23, 'prod23.jpeg', 'Binergy Biopronat', 'General', 60000, 'Probióticos.');
-        add(24, 'prod24.jpeg', 'Bio XL-S', 'General', 55000, 'Metabolismo.');
-        add(25, 'prod25.jpeg', '18 Raics', 'General', 65000, 'Fórmula natural.');
-        add(26, 'prod26.jpeg', 'Plus Aguaje', 'General', 50000, 'Bienestar mujer.');
-        add(27, 'prod27.jpeg', 'AntRitico', 'General', 45000, 'Dolor articular.');
-        add(28, 'prod28.jpeg', 'Biloying', 'General', 55000, 'Vitalidad.');
-        add(29, 'prod29.jpeg', 'Bililax', 'General', 50000, 'Regularidad.');
-        add(30, 'prod30.jpeg', 'Calci D', 'General', 40000, 'Calcio.');
-        add(31, 'prod31.jpeg', 'ResVeratol', 'General', 60000, 'Antienvejecimiento.');
-        add(32, 'prod32.jpeg', 'Chanca Piedra', 'General', 45000, 'Salud renal.');
-        add(33, 'prod33.jpeg', 'Citrato Magnesio Pura', 'General', 40000, 'Magnesio.');
-        add(34, 'prod34.jpeg', 'Clormag', 'General', 45000, 'Cloruro magnesio.');
-        add(35, 'prod35.jpeg', 'Clorofila', 'General', 40000, 'Desintoxicante.');
-        add(36, 'prod36.jpeg', 'ColahenVit', 'Cuidado Personal', 50000, 'Colágeno.');
-        add(37, 'prod37.jpeg', 'Colágeno Marino', 'Cuidado Personal', 55000, 'Origen marino.');
-        add(38, 'prod38.jpeg', 'Fenogreco', 'General', 45000, 'Apoyo digestivo.');
-        add(39, 'prod39.jpeg', 'Fosbril', 'General', 50000, 'Fósforo.');
-        add(40, 'prod40.jpeg', 'Glucosartrim', 'General', 79000, 'Movilidad.');
-        add(41, 'prod41.jpeg', 'Maca Negra Roja', 'General', 45000, 'Energizante.');
-        add(42, 'prod42.jpeg', 'HEGLB-Max', 'General', 55000, 'Hemoglobina.');
-        add(43, 'prod43.jpeg', 'Komp - B', 'General', 50000, 'Complejo B.');
-        add(44, 'prod44.jpeg', 'NAT Resveratrol', 'General', 60000, 'Salud celular.');
-        add(45, 'prod45.jpeg', 'Oirculen', 'General', 45000, 'Circulación.');
-        add(46, 'prod46.jpeg', 'Proshom', 'General', 55000, 'Hombre.');
-        add(47, 'prod47.jpeg', 'Ptenciol', 'General', 50000, 'Vitalidad.');
-        add(48, 'prod48.jpeg', 'Ashwagandha D3', 'General', 60000, 'Huesos.');
-        add(49, 'prod49.jpeg', 'Arthro Patique', 'General', 45000, 'Articulaciones.');
-        add(50, 'prod50.jpeg', 'Cardomarin', 'General', 55000, 'Hígado.');
-        add(51, 'prod51.jpeg', 'Echinacea D3', 'General', 50000, 'Inmunidad.');
-        add(52, 'prod52.jpeg', 'Enzydophilus', 'General', 45000, 'Enzimas.');
-        add(53, 'prod53.jpeg', 'Ginkgo Biloba D3', 'General', 55000, 'Memoria.');
-        add(54, 'prod54.jpeg', 'Melatonina D3', 'General', 50000, 'Descanso.');
-        add(55, 'prod55.jpeg', 'Phyllanthus', 'General', 45000, 'Riñones.');
-        add(56, 'prod56.jpeg', 'Saw Palmetto D3', 'General', 55000, 'Próstata.');
-        add(57, 'prod57.jpeg', 'Alcachofa Compuesta', 'General', 50000, 'Depurativo.');
-        add(58, 'prod58.jpeg', 'Arándano', 'General', 45000, 'Antioxidante.');
-        add(59, 'prod59.jpeg', 'Biotina Magnesio', 'General', 55000, 'Cabello.');
-        add(60, 'prod60.jpeg', 'Macasource', 'General', 45000, 'Energía.');
-        add(61, 'prod61.jpeg', 'Melatonina', 'General', 50000, 'Sueño.');
-        add(62, 'prod62.jpeg', 'HEPANAT', 'General', 60000, 'Salud hígado.');
+<!-- ══════════ WHATSAPP FLOAT ══════════ -->
+<!-- ══════════ FOOTER ══════════ -->
+<footer style="background:var(--green-dark); color:var(--white); padding:40px 20px 30px; margin-top:40px; text-align:center;">
+    <div style="max-width:600px; margin:0 auto;">
+        <div style="margin-bottom:6px; font-size:.8rem; color:rgba(255,255,255,.5); letter-spacing:1px; text-transform:uppercase;">Síguenos en</div>
+        <h3 style="font-size:1.3rem; font-weight:700; color:var(--gold); margin-bottom:24px;">Nuestras Redes Sociales</h3>
 
-        let cart = JSON.parse(localStorage.getItem('nm_cart')) || [];
-        let user = JSON.parse(localStorage.getItem('nm_user')) || null;
-        let curFilter = 'Todas', curPage = 1, perPage = 12;
+        <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:30px;">
 
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 2500); }
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/share/1Cg9MmFHPE/" target="_blank" rel="noopener"
+               style="display:flex; align-items:center; gap:10px; background:#1877f2; color:white; text-decoration:none;
+                      padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
+                      transition:transform .2s, box-shadow .2s; box-shadow:0 4px 14px rgba(24,119,242,.4);"
+               onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 20px rgba(24,119,242,.5)'"
+               onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(24,119,242,.4)'">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+                </svg>
+                Facebook
+            </a>
 
-        function render() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-            let filtered = curFilter === 'Todas' ? products : products.filter(p => p.cat === curFilter);
-            const search = document.getElementById('searchBar').value.toLowerCase();
-            filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
-            
-            const start = (curPage - 1) * perPage;
-            filtered.slice(start, start + perPage).forEach(p => {
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@naturalmedikdh.dh?_r=1&_t=ZS-95ehgYXbK4b" target="_blank" rel="noopener"
+               style="display:flex; align-items:center; gap:10px; background:#010101; color:white; text-decoration:none;
+                      padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
+                      transition:transform .2s, box-shadow .2s; box-shadow:0 4px 14px rgba(0,0,0,.35);"
+               onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,.5)'"
+               onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(0,0,0,.35)'">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/>
+                </svg>
+                TikTok
+            </a>
+
+            <!-- Instagram (próximamente) -->
+            <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); color:rgba(255,255,255,.45);
+                        padding:12px 24px; border-radius:30px; font-weight:600; font-size:.92rem;
+                        border:1.5px dashed rgba(255,255,255,.2); cursor:default;" title="Próximamente">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+                Instagram — Próximamente
+            </div>
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,.1); padding-top:20px; font-size:.78rem; color:rgba(255,255,255,.4);">
+            © 2025 NATURAL medikdh · Bienestar natural a tu alcance 🌿
+        </div>
+    </div>
+</footer>
+
+<!-- ══════════ WHATSAPP FLOAT (logo oficial) ══════════ -->
+<a href="https://wa.me/573150674848" class="wa-float" target="_blank" rel="noopener" title="Escríbenos por WhatsApp">
+    <svg viewBox="0 0 39.9 40" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="white">
+        <path d="M33.9 5.9C30.2 2.1 25.2 0 19.9 0 9 0 .1 8.9.1 19.8c0 3.5.9 6.9 2.7 9.9L0 40l10.6-2.8c2.9 1.6 6.1 2.4 9.4 2.4 10.9 0 19.9-8.9 19.9-19.8-.1-5.3-2.1-10.2-6-13.9zM19.9 36.4c-2.9 0-5.8-.8-8.3-2.3l-.6-.4-6.3 1.6 1.7-6.1-.4-.6c-1.6-2.6-2.5-5.6-2.5-8.7 0-9 7.3-16.3 16.3-16.3 4.4 0 8.4 1.7 11.5 4.8 3.1 3.1 4.7 7.1 4.7 11.5.1 9-7.2 16.5-16.1 16.5zm8.9-12.2c-.5-.2-2.9-1.4-3.3-1.6-.4-.2-.7-.2-1 .2-.3.5-1.2 1.6-1.5 1.9-.3.3-.5.4-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.3-2.4-2.8-2.6-3.3-.3-.5 0-.7.2-1l.9-1c.3-.4.4-.6.5-.9.2-.3.1-.6 0-.9-.1-.2-1-2.4-1.4-3.3-.4-.9-.7-.8-1-.8h-.9c-.3 0-.8.1-1.3.6-.4.5-1.7 1.6-1.7 4s1.7 4.6 2 4.9c.2.3 3.4 5.2 8.3 7.3 1.2.5 2.1.8 2.8 1 1.2.4 2.2.3 3.1.2.9-.1 2.9-1.2 3.3-2.3.4-1.1.4-2.1.3-2.3-.3-.2-.6-.3-1.1-.5z"/>
+    </svg>
+</a>
+
+<!-- ══════════ DOCTORA ZEN ══════════ -->
+<div id="zenWrap" style="position:fixed; bottom:90px; right:22px; z-index:1200; display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+
+    <!-- Burbuja de saludo -->
+    <div id="zenBubble" style="
+        background:var(--white);
+        border-radius:16px 16px 4px 16px;
+        padding:10px 14px;
+        font-size:.8rem;
+        font-weight:600;
+        color:var(--green-dark);
+        box-shadow:0 4px 18px rgba(0,0,0,.15);
+        max-width:180px;
+        text-align:center;
+        opacity:0;
+        transform:translateY(8px) scale(.95);
+        transition:opacity .35s, transform .35s;
+        pointer-events:none;
+        line-height:1.4;
+    ">¡Hola! 👋 Soy la <strong>Dra. Zen</strong><br>¿En qué te ayudo hoy?</div>
+
+    <!-- Avatar Doctora Zen -->
+    <div id="zenBtn" onclick="toggleZenChat()" title="Hablar con Dra. Zen" style="
+        position:relative;
+        cursor:pointer;
+        width:64px;
+        transition:transform .3s;
+    ">
+        <!-- Círculo base verde -->
+        <div style="
+            width:64px; height:64px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#123d2b,#0e9427);
+            box-shadow:0 6px 20px rgba(14,148,39,.45);
+            border:3px solid var(--gold);
+            overflow:hidden;
+            position:relative;
+        ">
+            <img src="doctora-zen.png"
+                 onerror="this.style.display='none'; document.getElementById('zenInitial').style.display='flex';"
+                 style="width:100%; height:100%; object-fit:cover; object-position:center top; transform:scale(1.15); transform-origin:bottom center;">
+            <!-- Fallback si no hay imagen -->
+            <div id="zenInitial" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:1.6rem;">🌿</div>
+        </div>
+        <!-- Cabeza sobresaliendo: emoji/avatar arriba del círculo -->
+        <div style="
+            position:absolute;
+            top:-14px; left:50%;
+            transform:translateX(-50%);
+            font-size:1.6rem;
+            line-height:1;
+            filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
+            pointer-events:none;
+        ">👩‍⚕️</div>
+        <!-- Punto verde "en línea" -->
+        <div style="
+            position:absolute; bottom:2px; right:2px;
+            width:14px; height:14px;
+            background:#2ecc71;
+            border-radius:50%;
+            border:2px solid white;
+        "></div>
+    </div>
+</div>
+
+<!-- ══════════ CHAT DOCTORA ZEN ══════════ -->
+<div id="zenChat" style="
+    position:fixed;
+    bottom:170px; right:22px;
+    width:320px;
+    background:var(--white);
+    border-radius:20px;
+    box-shadow:0 12px 40px rgba(0,0,0,.2);
+    z-index:1300;
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+    max-height:480px;
+    animation:zenIn .3s ease;
+">
+    <!-- Header chat -->
+    <div style="background:linear-gradient(135deg,#123d2b,#0e9427); padding:14px 16px; display:flex; align-items:center; gap:10px;">
+        <div style="font-size:1.8rem; line-height:1;">👩‍⚕️</div>
+        <div style="flex:1;">
+            <div style="color:white; font-weight:700; font-size:.92rem;">Dra. Zen</div>
+            <div style="color:rgba(255,255,255,.7); font-size:.72rem;">Asesora de bienestar natural · En línea</div>
+        </div>
+        <button onclick="toggleZenChat()" style="background:rgba(255,255,255,.15); border:none; color:white; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">✕</button>
+    </div>
+
+    <!-- Área mensajes -->
+    <div id="zenMessages" style="flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; max-height:300px; background:#f8fdf8;">
+    </div>
+
+    <!-- Input zona -->
+    <div id="zenInputZone" style="padding:10px 12px; border-top:1px solid var(--border); display:flex; gap:8px; align-items:center; background:white;">
+        <input id="zenInput" type="text" placeholder="Escribe tu pregunta..." 
+               style="flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:20px; font-family:'Poppins',sans-serif; font-size:.82rem; outline:none;"
+               onkeydown="if(event.key==='Enter') sendZenMsg()">
+        <button onclick="sendZenMsg()" style="background:var(--green-accent); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;">➤</button>
+    </div>
+</div>
+
+<style>
+@keyframes zenIn {
+    from { opacity:0; transform:translateY(20px) scale(.96); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes zenWave {
+    0%,100% { transform:rotate(0deg); }
+    20%     { transform:rotate(-15deg); }
+    40%     { transform:rotate(15deg); }
+    60%     { transform:rotate(-10deg); }
+    80%     { transform:rotate(8deg); }
+}
+#zenBtn:hover { transform:translateY(-4px); }
+#zenBtn:hover .zen-head { animation: zenWave .6s ease; }
+
+.zen-msg-bot {
+    display:flex; gap:7px; align-items:flex-end;
+}
+.zen-msg-bot .bubble {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px 16px 16px 4px;
+    padding:9px 12px;
+    font-size:.8rem;
+    line-height:1.5;
+    color:var(--text);
+    max-width:230px;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+}
+.zen-msg-user {
+    display:flex; justify-content:flex-end;
+}
+.zen-msg-user .bubble {
+    background:var(--green-accent);
+    color:white;
+    border-radius:16px 16px 4px 16px;
+    padding:9px 12px;
+    font-size:.8rem;
+    line-height:1.5;
+    max-width:230px;
+}
+.zen-faq-btn {
+    background:white;
+    border:1.5px solid var(--green-accent);
+    color:var(--green-accent);
+    border-radius:20px;
+    padding:7px 14px;
+    font-family:'Poppins',sans-serif;
+    font-size:.75rem;
+    font-weight:600;
+    cursor:pointer;
+    margin:3px 2px;
+    transition:.2s;
+}
+.zen-faq-btn:hover { background:var(--green-accent); color:white; }
+.zen-wa-btn {
+    display:flex; align-items:center; gap:8px;
+    background:#25d366;
+    color:white;
+    border:none;
+    border-radius:20px;
+    padding:9px 16px;
+    font-family:'Poppins',sans-serif;
+    font-size:.8rem;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:4px;
+    transition:.2s;
+    width:100%;
+    justify-content:center;
+}
+.zen-wa-btn:hover { background:#1db954; }
+</style>
+
+<script>
+/* ══════ DOCTORA ZEN LOGIC ══════ */
+let zenOpen = false;
+let zenChatStarted = false;
+
+// FAQ base
+const ZEN_FAQ = [
+    { q: "¿Cómo hago un pedido?", a: "Es muy fácil 🛒 Elige tus productos, agrégalos al carrito, haz clic en *Finalizar pedido* y llena tus datos. Te contactamos por WhatsApp para confirmar." },
+    { q: "¿Hacen domicilio?", a: "¡Sí! Hacemos envíos a toda Colombia 🇨🇴 El tiempo de entrega depende de tu ciudad. Escríbenos por WhatsApp para más detalles." },
+    { q: "¿Cuáles son los métodos de pago?", a: "Aceptamos Nequi 💚, Daviplata 💜 y Efectivo contra entrega 💵. Puedes elegir el que prefieras al finalizar tu pedido." },
+    { q: "¿Los productos son naturales?", a: "¡Totalmente! 🌿 Todos nuestros productos son suplementos naturales, cuidadosamente seleccionados para tu bienestar. Son seguros y de alta calidad." },
+    { q: "¿Tienen garantía?", a: "Absolutamente ✅ Si tienes algún inconveniente con tu pedido, contáctanos por WhatsApp y lo resolvemos de inmediato. Tu satisfacción es lo primero." },
+    { q: "Quiero hablar con un asesor", a: "¡Con gusto! Nuestro equipo está listo para ayudarte 😊" },
+];
+
+function toggleZenChat() {
+    zenOpen = !zenOpen;
+    const chat = document.getElementById('zenChat');
+    const bubble = document.getElementById('zenBubble');
+
+    if (zenOpen) {
+        chat.style.display = 'flex';
+        bubble.style.opacity = '0';
+        if (!zenChatStarted) {
+            zenChatStarted = true;
+            setTimeout(() => zenBotMsg(
+                "¡Hola! 🌿 Soy la <strong>Doctora Zen</strong>, tu asesora de bienestar natural de NATURAL medikdh.<br><br>¿En qué puedo ayudarte hoy?"
+            ), 300);
+            setTimeout(() => zenShowFAQ(), 900);
+        }
+    } else {
+        chat.style.display = 'none';
+        // Mostrar burbuja de bienvenida brevemente
+        bubble.style.opacity = '1';
+        bubble.style.transform = 'translateY(0) scale(1)';
+        setTimeout(() => {
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'translateY(8px) scale(.95)';
+        }, 3000);
+    }
+}
+
+// Mostrar burbuja al inicio después de 3s
+setTimeout(() => {
+    const b = document.getElementById('zenBubble');
+    b.style.opacity = '1';
+    b.style.transform = 'translateY(0) scale(1)';
+    setTimeout(() => {
+        b.style.opacity = '0';
+        b.style.transform = 'translateY(8px) scale(.95)';
+    }, 5000);
+}, 3000);
+
+function zenBotMsg(html) {
+    const msgs = document.getElementById('zenMessages');
+    const d = document.createElement('div');
+    d.className = 'zen-msg-bot';
+    d.innerHTML = `<div style="font-size:1.2rem;flex-shrink:0;">👩‍⚕️</div><div class="bubble">${html}</div>`;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function zenUserMsg(text) {
+    const msgs = document.getElementById('zenMessages');
+    const d = document.createElement('div');
+    d.className = 'zen-msg-user';
+    d.innerHTML = `<div class="bubble">${text}</div>`;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function zenShowFAQ() {
+    const msgs = document.getElementById('zenMessages');
+    const d = document.createElement('div');
+    d.className = 'zen-msg-bot';
+    const btns = ZEN_FAQ.map((f, i) =>
+        `<button class="zen-faq-btn" onclick="selectFAQ(${i})">${f.q}</button>`
+    ).join('');
+    d.innerHTML = `<div style="font-size:1.2rem;flex-shrink:0;">👩‍⚕️</div><div class="bubble">Selecciona una pregunta frecuente o escribe la tuya 👇<br><br><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;">${btns}</div></div>`;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function selectFAQ(i) {
+    zenUserMsg(ZEN_FAQ[i].q);
+    setTimeout(() => {
+        zenBotMsg(ZEN_FAQ[i].a.replace(/\*/g, '<strong>').replace(/\*/g, '</strong>'));
+        setTimeout(() => zenOfferWA(), 600);
+    }, 400);
+}
+
+function zenOfferWA() {
+    const msgs = document.getElementById('zenMessages');
+    const d = document.createElement('div');
+    d.className = 'zen-msg-bot';
+    d.innerHTML = `
+        <div style="font-size:1.2rem;flex-shrink:0;">👩‍⚕️</div>
+        <div class="bubble">
+            ¿Tienes más preguntas? Puedo responderlas aquí o puedes hablar directamente con nuestro equipo 💬
+            <button class="zen-wa-btn" onclick="window.open('https://wa.me/573150674848?text=Hola%20NATURAL%20medikdh%2C%20necesito%20asesoría','_blank')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.523 5.855L0 24l6.29-1.493A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.366l-.36-.213-3.733.886.932-3.62-.234-.373A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182c5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+                Continuar por WhatsApp
+            </button>
+        </div>`;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendZenMsg() {
+    const input = document.getElementById('zenInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    zenUserMsg(text);
+
+    // Indicador "escribiendo..."
+    const msgs = document.getElementById('zenMessages');
+    const typing = document.createElement('div');
+    typing.className = 'zen-msg-bot';
+    typing.id = 'zenTyping';
+    typing.innerHTML = `<div style="font-size:1.2rem;flex-shrink:0;">👩‍⚕️</div><div class="bubble" style="color:#aaa;font-style:italic;">Escribiendo...</div>`;
+    msgs.appendChild(typing);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    try {
+        const resp = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 1000,
+                system: `Eres la Doctora Zen, asesora de bienestar natural de la tienda NATURAL medikdh. 
+Eres cálida, profesional, empática y experta en suplementos naturales y bienestar.
+Respondes SIEMPRE en español, de forma breve (máximo 3 oraciones) y amigable.
+Solo brindas información sobre salud natural, suplementos, bienestar y los productos de NATURAL medikdh.
+Si te preguntan algo fuera de ese tema, redirige amablemente hacia temas de bienestar.
+Al final de cada respuesta, si aplica, ofrece hablar por WhatsApp para más detalles.
+Nunca diagnostiques enfermedades ni reemplaces la consulta médica.
+Empieza las respuestas de forma variada, no siempre igual.`,
+                messages: [{ role: "user", content: text }]
+            })
+        });
+        const data = await resp.json();
+        document.getElementById('zenTyping')?.remove();
+        const reply = data?.content?.[0]?.text || "Disculpa, tuve un problema. ¿Puedo ayudarte de otra forma?";
+        zenBotMsg(reply);
+        zenOfferWA();
+    } catch(e) {
+        document.getElementById('zenTyping')?.remove();
+        zenBotMsg("Ups, tuve un inconveniente técnico 😅 Pero puedes escribirnos directamente por WhatsApp y te atendemos enseguida.");
+        zenOfferWA();
+    }
+}
+</script>
+
+<!-- ══════════ JAVASCRIPT ══════════ -->
+<script>
+    /* ─── CONSTANTES ─── */
+    const WA = "573150674848";
+    const PER_PAGE = 12;
+    const cop = n => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0}).format(n);
+
+    /* ─── BASE DE DATOS 62 PRODUCTOS ─── */
+    const DB = [];
+    const p = (id,img,name,cat,price,desc) => DB.push({id, img:`jpeg/${img}`, name, cat, price, desc});
+
+    p(1,  'prod1.jpeg',  'Gomitas Manzana Satibo',        'Vitaminas',         45500, 'Formuladas con vinagre de manzana para apoyar la digestión sana, el control de peso y el equilibrio del pH. Deliciosas y fáciles de tomar.');
+    p(2,  'prod2.jpeg',  'Cúrcuma + Pimienta Negra',      'Cuidado Personal',  60000, 'Poderoso antiinflamatorio natural. La piperina de la pimienta negra potencia hasta 20 veces la absorción de la curcumina.');
+    p(3,  'prod3.jpeg',  'Magnesio + Potasio',            'General',           43000, 'Combinación esencial para la función muscular, reducción de calambres, salud cardiaca y equilibrio de electrolitos.');
+    p(4,  'prod4.jpeg',  'Cardo Mariano',                 'Digestión',         60000, 'Protege y regenera el hígado de forma natural gracias a la silimarina. Ideal para desintoxicación hepática.');
+    p(5,  'prod5.jpeg',  'Ashwagandha',                   'Estrés',            55000, 'Adaptógeno natural que reduce el cortisol, mejora la calidad del sueño y combate el agotamiento físico y mental.');
+    p(6,  'prod6.jpeg',  'Citrato de Magnesio',           'General',           40000, 'Alta biodisponibilidad para mejorar la salud muscular, cardiovascular y el sistema nervioso. Combate el estrés oxidativo.');
+    p(7,  'prod7.jpeg',  'Verde Aloe Vera',               'Digestión',         48000, 'Ayuda con el estreñimiento, la inflamación intestinal y el síndrome de intestino irritable. Efecto suavizante y depurativo.');
+    p(8,  'prod8.jpeg',  'VID C+ Calostro',               'Vitaminas',         52000, 'Refuerza el sistema inmune con vitamina C de alta potencia más calostro bovino, rico en inmunoglobulinas naturales.');
+    p(9,  'prod9.jpeg',  'DURON',                         'Energía',           45000, 'Suplemento energizante natural que mejora la resistencia física, combate la fatiga y potencia el rendimiento deportivo.');
+    p(10, 'prod10.jpeg', 'Malteada Satisure',             'General',           55000, 'Sustituto nutricional completo con proteínas, vitaminas y minerales. Ideal para personas con bajo apetito o necesidades especiales.');
+    p(11, 'prod11.jpeg', 'EPA-DHA Omega 3',               'Cuidado Personal',  65000, 'Ácidos grasos esenciales de alta pureza para la salud cerebral, cardiovascular y reducción de triglicéridos.');
+    p(12, 'prod12.jpeg', 'Propolfin Kids',                'Vitaminas',         40000, 'Extracto de propóleo natural formulado para niños. Fortalece las defensas, ideal en épocas de gripa y resfriados.');
+    p(13, 'prod13.jpeg', 'Propolfin Adultos',             'Vitaminas',         45000, 'Propóleo concentrado para adultos. Antibacteriano natural que refuerza el sistema inmunológico y protege la garganta.');
+    p(14, 'prod14.jpeg', 'Collagen & Biotin',             'Cuidado Personal',  60000, 'Fórmula para la belleza desde adentro: colágeno hidrolizado más biotina para piel firme, cabello fuerte y uñas sanas.');
+    p(15, 'prod15.jpeg', 'Complex Plus Children',         'Vitaminas',         48000, 'Multivitamínico completo para niños con vitaminas A, C, D, E, B y minerales esenciales para su crecimiento y vitalidad.');
+    p(16, 'prod16.jpeg', 'Vitamina D3',                   'Vitaminas',         40000, 'Vitamina D3 de alta potencia para huesos fuertes, sistema inmune robusto y bienestar emocional. Esencial en interiores.');
+    p(17, 'prod17.jpeg', 'Complex Adultos',               'Vitaminas',         55000, 'Multivitamínico adulto de amplio espectro que cubre carencias nutricionales diarias y apoya la vitalidad general.');
+    p(18, 'prod18.jpeg', 'Colágeno Hidrolizado',          'Cuidado Personal',  50000, 'Mejora la elasticidad y firmeza de la piel, la salud de articulaciones y el bienestar del cabello. Fácil absorción.');
+    p(19, 'prod19.jpeg', 'PlaXavil',                      'Vitaminas',         45000, 'Suplemento de refuerzo inmune con extractos naturales. Ayuda al cuerpo a defenderse ante infecciones y virus.');
+    p(20, 'prod20.jpeg', 'Vinu-CR-Brl',                   'Vitaminas',         50000, 'Suplemento con zinc y vitaminas del complejo B para apoyar el metabolismo, la piel y el sistema inmunológico.');
+    p(21, 'prod21.jpeg', 'Torvitol',                      'General',           55000, 'Fórmula antioxidante potente con vitaminas C y E, selenio y zinc. Combate el estrés oxidativo y el envejecimiento celular.');
+    p(22, 'prod22.jpeg', 'Almendras D3 Calcio',           'Cuidado Personal',  48000, 'Calcio con vitamina D3 para la absorción óptima. Fortalece huesos y dientes, previene la osteoporosis.');
+    p(23, 'prod23.jpeg', 'Binergy Biopronat',             'General',           60000, 'Probiótico multiestirpe que restaura la flora intestinal, mejora la digestión y refuerza las defensas desde el intestino.');
+    p(24, 'prod24.jpeg', 'Bio XL-S',                      'General',           55000, 'Apoya el metabolismo de grasas y carbohidratos. Complemento natural para planes de control de peso y bienestar metabólico.');
+    p(25, 'prod25.jpeg', '18 Raics',                      'General',           65000, 'Fórmula herbal exclusiva con 18 raíces medicinales seleccionadas para la revitalización y el equilibrio del organismo.');
+    p(26, 'prod26.jpeg', 'Plus Aguaje',                   'General',           50000, 'Natural para la mujer: apoya el equilibrio hormonal, mejora la figura y aporta fitoestrogenos del fruto amazónico aguaje.');
+    p(27, 'prod27.jpeg', 'AntRitico',                     'General',           45000, 'Alivia el dolor articular, la inflamación y la rigidez. Fórmula natural para artritis, reumatismo y molestias musculares.');
+    p(28, 'prod28.jpeg', 'Biloying',                      'General',           55000, 'Suplemento de vitalidad general con extractos naturales para combatir el cansancio crónico y mejorar el rendimiento diario.');
+    p(29, 'prod29.jpeg', 'Bililax',                       'General',           50000, 'Apoya la regularidad intestinal y el bienestar digestivo. Fórmula suave que no genera dependencia ni cólicos.');
+    p(30, 'prod30.jpeg', 'Calci D',                       'General',           40000, 'Calcio de alta biodisponibilidad con vitamina D. Esencial para la salud ósea en todas las edades, especialmente en mayores.');
+    p(31, 'prod31.jpeg', 'ResVeratol',                    'General',           60000, 'Resveratrol de alta concentración con propiedades antienvejecimiento, cardioprotectoras y antiinflamatorias.');
+    p(32, 'prod32.jpeg', 'Chanca Piedra',                 'General',           45000, 'Planta medicinal reconocida para apoyar la salud renal, prevenir y disolver cálculos en riñones y vejiga.');
+    p(33, 'prod33.jpeg', 'Citrato Magnesio Pura',         'General',           40000, 'Magnesio en su forma más pura y absorbible. Ideal para el sistema nervioso, músculos y calidad del sueño.');
+    p(34, 'prod34.jpeg', 'Clormag',                       'General',           45000, 'Cloruro de magnesio natural para fortalecer el sistema inmune, mejorar la circulación y aliviar dolores musculares.');
+    p(35, 'prod35.jpeg', 'Clorofila',                     'General',           40000, 'Desintoxicante natural que alcaliniza la sangre, combate el mal olor corporal y apoya la oxigenación celular.');
+    p(36, 'prod36.jpeg', 'ColahenVit',                    'Cuidado Personal',  50000, 'Colágeno con vitaminas para la regeneración de la piel, cartílagos y tejidos. Combate los signos del envejecimiento.');
+    p(37, 'prod37.jpeg', 'Colágeno Marino',               'Cuidado Personal',  55000, 'Colágeno de origen marino de alta biodisponibilidad. Superior para piel, cabello, uñas y articulaciones.');
+    p(38, 'prod38.jpeg', 'Fenogreco',                     'General',           45000, 'Semillas de fenogreco para apoyo digestivo, control de glucemia, lactancia y vitalidad masculina. Uso ancestral.');
+    p(39, 'prod39.jpeg', 'Fosbril',                       'General',           50000, 'Fósforo orgánico para la salud cerebral, ósea y muscular. Apoya la memoria y la concentración.');
+    p(40, 'prod40.jpeg', 'Glucosartrim',                  'General',           79000, 'Suplemento avanzado para la salud articular con glucosamina, condroitina y MSM. Mejora la movilidad y el confort.');
+    p(41, 'prod41.jpeg', 'Maca Negra/Roja',               'General',           45000, 'Raíz andina adaptógena que potencia la energía, la libido, la fertilidad y el rendimiento físico y mental.');
+    p(42, 'prod42.jpeg', 'HEGLB-Max',                     'General',           55000, 'Apoya la producción de hemoglobina y combate la anemia con hierro, folato y vitaminas del grupo B.');
+    p(43, 'prod43.jpeg', 'Komp - B',                      'General',           50000, 'Complejo B completo (B1, B2, B3, B5, B6, B7, B9, B12) para el sistema nervioso, energía y metabolismo celular.');
+    p(44, 'prod44.jpeg', 'NAT + Resveratrol',             'General',           60000, 'Combinación para la salud celular y cardiovascular. Potente antioxidante que protege las células del daño oxidativo.');
+    p(45, 'prod45.jpeg', 'Oirculen',                      'General',           45000, 'Mejora la circulación periférica, alivia la pesadez de piernas, várices y la sensación de hormigueo en extremidades.');
+    p(46, 'prod46.jpeg', 'Proshom',                       'General',           55000, 'Suplemento masculino para vitalidad, desempeño y bienestar hormonal. Formulado con extractos naturales potenciadores.');
+    p(47, 'prod47.jpeg', 'Ptenciol',                      'General',           50000, 'Potenciador natural de la energía y el desempeño. Fórmula con adaptógenos y plantas que combaten el cansancio.');
+    p(48, 'prod48.jpeg', 'Ashwagandha D3',                'General',           60000, 'Doble acción: control del estrés con ashwagandha más vitamina D3 para el sistema inmune y el bienestar mental.');
+    p(49, 'prod49.jpeg', 'Arthro Patique',                'General',           45000, 'Suplemento articular con colágeno tipo II, cúrcuma y boswellia. Alivia el dolor y mejora la flexibilidad.');
+    p(50, 'prod50.jpeg', 'Cardomarin',                    'General',           55000, 'Silimarina de cardo mariano en alta concentración para proteger el hígado de toxinas, medicamentos y alcohol.');
+    p(51, 'prod51.jpeg', 'Echinacea D3',                  'General',           50000, 'Equinácea con vitamina D3 para reforzar las defensas, reducir la duración de resfriados y gripes.');
+    p(52, 'prod52.jpeg', 'Enzydophilus',                  'General',           45000, 'Enzimas digestivas más probióticos para mejorar la absorción de nutrientes y el equilibrio de la microbiota intestinal.');
+    p(53, 'prod53.jpeg', 'Ginkgo Biloba D3',              'General',           55000, 'Mejora la circulación cerebral, la memoria, la concentración y la agudeza mental. Ideal para estudiantes y adultos mayores.');
+    p(54, 'prod54.jpeg', 'Melatonina D3',                 'General',           50000, 'Melatonina con vitamina D3 para regular el ciclo sueño-vigilia, combatir el insomnio y apoyar el sistema inmune.');
+    p(55, 'prod55.jpeg', 'Phyllanthus CH5',               'General',           45000, 'Extracto de phyllanthus niruri para la salud renal, diurético natural y apoyo en procesos de litiasis renal.');
+    p(56, 'prod56.jpeg', 'Saw Palmetto D3',               'General',           55000, 'Extracto de palmeto enano para la salud de la próstata, reducción de síntomas urinarios y bienestar masculino.');
+    p(57, 'prod57.jpeg', 'Alcachofa Compuesta',           'General',           50000, 'Fórmula depurativa con alcachofa, diente de león y cardo mariano para limpiar el hígado y mejorar la digestión.');
+    p(58, 'prod58.jpeg', 'Arándano',                      'General',           45000, 'Rico en antioxidantes y proantocianidinas que protegen el tracto urinario, la visión y la salud cardiovascular.');
+    p(59, 'prod59.jpeg', 'Biotina + Magnesio',            'General',           55000, 'Biotina para el crecimiento del cabello y la salud de las uñas, más magnesio para el sistema nervioso y muscular.');
+    p(60, 'prod60.jpeg', 'Macasource',                    'General',           45000, 'Maca peruana en cápsula de alta concentración para energía, libido, resistencia y equilibrio hormonal natural.');
+    p(61, 'prod61.jpeg', 'Melatonina',                    'General',           50000, 'Hormona del sueño en formato de fácil absorción. Regula el ritmo circadiano y mejora la calidad del descanso.');
+    p(62, 'prod62.jpeg', 'HEPANAT Silimarina',            'General',           60000, 'Silimarina premium para la regeneración hepática, protección contra toxinas y mejora de la función del hígado.');
+
+    /* ─── ESTADO ─── */
+    let filtered = [...DB];
+    let page = 1;
+    let cart = JSON.parse(localStorage.getItem('nm_cart') || '[]');
+    let user = JSON.parse(localStorage.getItem('nm_user') || 'null');
+
+    /* ─── RENDER GRID ─── */
+    function render() {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        const start = (page - 1) * PER_PAGE;
+        filtered.slice(start, start + PER_PAGE).forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => openProd(prod.id);
+            card.innerHTML = `
+                <img class="card-img" src="${prod.img}" alt="${prod.name}" onerror="this.src='logo.png'">
+                <div class="card-body">
+                    <div class="card-cat">${prod.cat}</div>
+                    <div class="card-name">${prod.name}</div>
+                    <div class="card-price">${cop(prod.price)}</div>
+                </div>`;
+            grid.appendChild(card);
+        });
+        renderPager();
+    }
+
+    function renderPager() {
+        const pager = document.getElementById('pager');
+        pager.innerHTML = '';
+        const pages = Math.ceil(filtered.length / PER_PAGE);
+        if (pages <= 1) return;
+        for (let i = 1; i <= pages; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'pager-btn' + (i === page ? ' active' : '');
+            btn.textContent = i;
+            btn.onclick = () => { page = i; render(); scrollTo(0, 0); };
+            pager.appendChild(btn);
+        }
+    }
+
+    /* ─── FILTROS ─── */
+    function filterCat(cat) {
+        document.querySelectorAll('.pill').forEach(b => {
+            b.classList.toggle('active', b.textContent.trim().includes(cat) || (cat === 'Todas' && b.textContent.includes('Todas')));
+        });
+        filtered = cat === 'Todas' ? [...DB] : DB.filter(p => p.cat === cat);
+        page = 1;
+        render();
+    }
+
+    document.getElementById('searchBar').addEventListener('input', e => {
+        const q = e.target.value.toLowerCase();
+        filtered = q ? DB.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) : [...DB];
+        page = 1;
+        render();
+    });
+
+    /* ─── MODAL PRODUCTO ─── */
+    function openProd(id) {
+        const prod = DB.find(p => p.id === id);
+        document.getElementById('mImg').src = prod.img;
+        document.getElementById('mCat').textContent = prod.cat;
+        document.getElementById('mName').textContent = prod.name;
+        document.getElementById('mPrice').textContent = cop(prod.price);
+        document.getElementById('mDesc').textContent = prod.desc;
+        document.getElementById('mQty').textContent = '1';
+
+        document.getElementById('mAddBtn').onclick = () => {
+            addToCart(prod, parseInt(document.getElementById('mQty').textContent));
+            closeOverlay('prodOverlay');
+        };
+
+        // Relacionados
+        const rel = DB.filter(r => r.cat === prod.cat && r.id !== prod.id).slice(0, 5);
+        const row = document.getElementById('relRow');
+        row.innerHTML = '';
+        rel.forEach(r => {
+            const d = document.createElement('div');
+            d.className = 'rel-card';
+            d.onclick = e => { e.stopPropagation(); openProd(r.id); };
+            d.innerHTML = `<img src="${r.img}" onerror="this.src='logo.png'" alt="${r.name}"><p>${r.name}</p>`;
+            row.appendChild(d);
+        });
+        if (rel.length === 0) row.innerHTML = '<p style="font-size:.78rem;color:var(--gray);">Sin productos relacionados en esta categoría.</p>';
+
+        document.getElementById('prodOverlay').classList.add('on');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function deltaQty(v) {
+        let q = parseInt(document.getElementById('mQty').textContent) + v;
+        if (q < 1) q = 1;
+        document.getElementById('mQty').textContent = q;
+    }
+
+    /* ─── OVERLAYS ─── */
+    function closeOverlay(id) {
+        document.getElementById(id).classList.remove('on');
+        document.body.style.overflow = '';
+    }
+    function closeIfBg(e, id) { if (e.target.id === id) closeOverlay(id); }
+
+    /* ─── CARRITO ─── */
+    function toggleCart() { document.getElementById('cartPanel').classList.toggle('on'); }
+
+    function addToCart(prod, qty) {
+        const ex = cart.find(i => i.id === prod.id);
+        if (ex) ex.qty += qty; else cart.push({ ...prod, qty });
+        sync();
+        toast('✅ Añadido al pedido');
+        popCart();
+    }
+
+    function changeQty(id, v) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        item.qty += v;
+        if (item.qty < 1) cart = cart.filter(i => i.id !== id);
+        sync();
+    }
+
+    function clearCart() {
+        if (!confirm('¿Vaciar todo el pedido?')) return;
+        cart = [];
+        sync();
+    }
+
+    function sync() {
+        localStorage.setItem('nm_cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function renderCart() {
+        const list = document.getElementById('cartList');
+        let total = 0, count = 0;
+
+        if (cart.length === 0) {
+            list.innerHTML = '<div class="empty-cart"><div class="emoji">🛒</div><p>Tu pedido está vacío</p><p style="font-size:.8rem;margin-top:6px;">Agrega productos para comenzar</p></div>';
+        } else {
+            list.innerHTML = '';
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                count += item.qty;
                 const d = document.createElement('div');
-                d.className = 'product-card';
-                d.onclick = () => openP(p);
-                d.innerHTML = `<div class="product-img-box"><img src="${p.img}" onerror="this.src='logo.png'"></div><h3>${p.name}</h3><p style="color:var(--green-accent);font-weight:700;">${fmt(p.price)}</p>`;
-                grid.appendChild(d);
-            });
-            renderPager(filtered.length);
-        }
-
-        function renderPager(total) {
-            const cont = document.getElementById('paginationContainer'); cont.innerHTML = '';
-            const pages = Math.ceil(total / perPage);
-            if(pages <= 1) return;
-            for(let i=1; i<=pages; i++) {
-                const b = document.createElement('button');
-                b.style = `padding:8px 15px; border-radius:50%; border:1px solid #ddd; background:${i===curPage?'#0e9427':'white'}; color:${i===curPage?'white':'black'}; cursor:pointer;`;
-                b.innerText = i; b.onclick = () => { curPage = i; render(); window.scrollTo(0,0); };
-                cont.appendChild(b);
-            }
-        }
-
-        function filterCat(c) {
-            curFilter = c; curPage = 1;
-            document.querySelectorAll('.category-pill').forEach(b => b.classList.toggle('active', b.innerText === c));
-            render();
-        }
-
-        document.getElementById('searchBar').addEventListener('input', () => { curPage = 1; render(); });
-
-        function saveUser() {
-            const d = { n: document.getElementById('uNombre').value, c: document.getElementById('uCiudad').value, b: document.getElementById('uBarrio').value, d: document.getElementById('uDireccion').value };
-            if(!d.n) return alert("Dinos tu nombre");
-            localStorage.setItem('nm_user', JSON.stringify(d));
-            user = d; initUser(); showToast("¡Datos guardados!"); toggleSidebar('userSidebar');
-        }
-        function initUser() {
-            if(user) {
-                document.getElementById('headerGreeting').innerText = `Hola, ${user.n.split(' ')[0]}`;
-                document.getElementById('userForm').style.display = 'none';
-                document.getElementById('userDisplay').style.display = 'block';
-                document.getElementById('displayNombre').innerText = user.n;
-            } else {
-                document.getElementById('headerGreeting').innerText = `Hola, Invitado`;
-                document.getElementById('userForm').style.display = 'block';
-                document.getElementById('userDisplay').style.display = 'none';
-            }
-        }
-        function logout() { localStorage.removeItem('nm_user'); user = null; initUser(); toggleSidebar('userSidebar'); }
-
-        function sync() { localStorage.setItem('nm_cart', JSON.stringify(cart)); updateUI(); }
-        function updateUI() {
-            const list = document.getElementById('cartList'); list.innerHTML = '';
-            let total = 0, count = 0;
-            cart.forEach(i => {
-                total += (i.price * i.qty); count += i.qty;
-                const d = document.createElement('div'); d.style="display:flex;gap:10px;margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:10px;";
-                d.innerHTML = `<img src="${i.img}" style="width:40px;height:40px;"> <div style="flex:1;"><strong>${i.name}</strong><br>${fmt(i.price)}</div> <div><button onclick="chQty(${i.id},-1)">-</button> ${i.qty} <button onclick="chQty(${i.id},1)">+</button></div>`;
+                d.className = 'ci';
+                d.innerHTML = `
+                    <img src="${item.img}" onerror="this.src='logo.png'" alt="${item.name}">
+                    <div class="ci-info">
+                        <strong>${item.name}</strong>
+                        <span>${cop(item.price)} c/u</span>
+                    </div>
+                    <div class="ci-ctrl">
+                        <button onclick="changeQty(${item.id},-1)">−</button>
+                        <span>${item.qty}</span>
+                        <button onclick="changeQty(${item.id},1)">+</button>
+                    </div>`;
                 list.appendChild(d);
             });
-            document.getElementById('cartTotal').innerText = fmt(total);
-            document.getElementById('cartCount').innerText = count;
-        }
-        function addToCart(p, q) {
-            const ex = cart.find(i => i.id === p.id);
-            if(ex) ex.qty += q; else cart.push({...p, qty: q});
-            sync(); showToast("¡Añadido!");
-        }
-        function chQty(id, v) {
-            const i = cart.find(x => x.id === id);
-            if(i) { i.qty += v; if(i.qty < 1) cart = cart.filter(x => x.id !== id); sync(); }
-        }
-        function clearCart() { if(confirm("¿Vaciar?")) { cart = []; sync(); } }
-
-        function openP(p) {
-            document.getElementById('mImg').src = p.img;
-            document.getElementById('mName').innerText = p.name;
-            document.getElementById('mPrice').innerText = fmt(p.price);
-            document.getElementById('mDesc').innerText = p.desc;
-            document.getElementById('mAddBtn').onclick = () => { addToCart(p, 1); closeM('pModal'); };
-            document.getElementById('pModal').classList.add('active');
-        }
-        function toggleSidebar(id) { document.getElementById(id).classList.toggle('active'); }
-        function closeM(id) { document.getElementById(id).classList.remove('active'); }
-        function closeModalExt(e, id) { if(e.target.id === id) closeM(id); }
-
-        function goCheckout() {
-            if(cart.length === 0) return;
-            toggleSidebar('cartSidebar');
-            if(user) {
-                document.getElementById('cN').value = user.n; document.getElementById('cC').value = user.c;
-                document.getElementById('cB').value = user.b; document.getElementById('cD').value = user.d;
-            }
-            document.getElementById('checkModal').classList.add('active');
         }
 
-        function sendWA() {
-            const n = document.getElementById('cN').value, c = document.getElementById('cC').value, 
-                  b = document.getElementById('cB').value, d = document.getElementById('cD').value, p = document.getElementById('cP').value;
-            if(!n || !c || !d) return alert("Completa los datos");
-            let m = "*PEDIDO NATURAL MEDIKDH*\n\n*Cliente:* " + n + "\n*Ciudad:* " + c + "\n*Barrio:* " + b + "\n*Direccion:* " + d + "\n*Pago:* " + p + "\n\n*PRODUCTOS:*\n";
-            let total = 0;
-            cart.forEach(i => { m += "- " + i.qty + "x " + i.name + " (" + fmt(i.price*i.qty) + ")\n"; total += (i.price*i.qty); });
-            m += "\n*TOTAL: " + fmt(total) + "*";
-            window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(m)}`, '_blank');
-            cart = []; sync(); closeM('checkModal');
-        }
+        document.getElementById('cartTotal').textContent = cop(total);
+        document.getElementById('cartBadge').textContent = count;
+    }
 
-        render(); initUser(); updateUI();
-    </script>
+    function popCart() {
+        const btn = document.getElementById('cartBtn');
+        btn.classList.remove('pop');
+        void btn.offsetWidth; // reflow
+        btn.classList.add('pop');
+        setTimeout(() => btn.classList.remove('pop'), 400);
+    }
+
+    /* ─── CHECKOUT ─── */
+    function openCheckout() {
+        if (cart.length === 0) { toast('⚠️ Tu pedido está vacío'); return; }
+        document.getElementById('cartPanel').classList.remove('on');
+
+        // Pre-llenar con datos del perfil si existen
+        if (user) {
+            document.getElementById('cNombre').value = user.nombre || '';
+            document.getElementById('cCiudad').value  = user.ciudad  || '';
+            document.getElementById('cBarrio').value  = user.barrio  || '';
+            document.getElementById('cDir').value     = user.dir     || '';
+        }
+        document.getElementById('checkOverlay').classList.add('on');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function sendWA() {
+        const n = document.getElementById('cNombre').value.trim();
+        const c = document.getElementById('cCiudad').value.trim();
+        const b = document.getElementById('cBarrio').value.trim();
+        const d = document.getElementById('cDir').value.trim();
+        const pago = document.getElementById('cPago').value;
+
+        if (!n || !c || !b || !d) { alert('Por favor completa todos los datos de entrega.'); return; }
+
+        let msg = '*PEDIDO - NATURAL MEDIKDH* 🌿\n\n';
+        msg += `*Cliente:* ${n}\n`;
+        msg += `*Ciudad:* ${c}\n`;
+        msg += `*Barrio:* ${b}\n`;
+        msg += `*Dirección:* ${d}\n`;
+        msg += `*Pago:* ${pago}\n\n`;
+        msg += '*PRODUCTOS:*\n';
+        let total = 0;
+        cart.forEach(i => {
+            msg += `- ${i.qty}x ${i.name} (${cop(i.price * i.qty)})\n`;
+            total += i.price * i.qty;
+        });
+        msg += `\n*TOTAL: ${cop(total)}*`;
+
+        window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
+        cart = [];
+        sync();
+        closeOverlay('checkOverlay');
+        toast('🎉 ¡Pedido enviado!');
+    }
+
+    /* ─── PERFIL ─── */
+    function togglePanel(id) { document.getElementById(id).classList.toggle('on'); }
+
+    function saveProfile() {
+        const nombre = document.getElementById('uNombre').value.trim();
+        const ciudad = document.getElementById('uCiudad').value.trim();
+        const barrio = document.getElementById('uBarrio').value.trim();
+        const dir    = document.getElementById('uDir').value.trim();
+        if (!nombre) { alert('Por favor ingresa tu nombre.'); return; }
+        user = { nombre, ciudad, barrio, dir };
+        localStorage.setItem('nm_user', JSON.stringify(user));
+        renderProfile();
+        toast('💾 ¡Datos guardados!');
+        togglePanel('userPanel');
+    }
+
+    function clearProfile() {
+        if (!confirm('¿Eliminar tus datos guardados?')) return;
+        user = null;
+        localStorage.removeItem('nm_user');
+        renderProfile();
+    }
+
+    function renderProfile() {
+        const form  = document.getElementById('profileForm');
+        const saved = document.getElementById('profileSaved');
+        const greet = document.getElementById('greeting');
+
+        if (user) {
+            greet.textContent = `Hola, ${user.nombre.split(' ')[0]} 👋`;
+            document.getElementById('pName').textContent = user.nombre;
+            document.getElementById('pData').textContent = `${user.ciudad} · ${user.barrio} · ${user.dir}`;
+            form.style.display  = 'none';
+            saved.style.display = 'block';
+        } else {
+            greet.textContent = '👤 Mi Perfil';
+            form.style.display  = 'block';
+            saved.style.display = 'none';
+        }
+    }
+
+    /* ─── TOAST ─── */
+    let toastTimer;
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    /* ─── INIT ─── */
+    render();
+    renderCart();
+    renderProfile();
+</script>
 </body>
 </html>
