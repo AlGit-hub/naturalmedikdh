@@ -131,7 +131,7 @@
         .pill.active, .pill:hover { background: var(--green-accent); color: var(--white); border-color: var(--green-accent); }
 
         /* ══════════ GRID ══════════ */
-        .main { padding: 28px 20px; max-width: 1240px; margin: 0 auto; }
+        .main { padding: 28px 20px; max-width: 1240px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
         .grid {
             display: flex;
@@ -466,6 +466,9 @@
         /* ══════════ RESPONSIVE ══════════ */
         @media (max-width: 600px) {
             header { padding: 10px 14px; top: 0; width: 100%; box-sizing: border-box; }
+            .main { padding: 16px 10px; }
+            .grid { gap: 12px; }
+            .grid .card { flex: 1 1 100%; max-width: 100%; }
             .search-wrap { width: 100%; order: 3; min-width: unset; max-width: 100%; }
             .cats { top: 76px; width: 100%; }
             .cart-panel { width: 100%; right: -105%; }
